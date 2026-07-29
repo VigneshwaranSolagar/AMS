@@ -1,0 +1,40 @@
+# Environment
+.env
+.env.*
+
+# Node
+node_modules/
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
+
+# WhatsApp Sessions
+auth_info/
+sessions/
+.baileys/
+app/auth_info/
+app/sessions/
+
+# Build
+dist/
+build/
+out/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AMS - Contacts</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Theme -->
+    <link rel="stylesheet"
+          href="../assets/css/theme.css">
+
+    <link rel="stylesheet"
+          href="../assets/css/common.css">
+
+    <link rel="stylesheet"
+          href="../assets/css/layout.css">
+
+    <link rel="stylesheet"
+          href="contacts.css">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="icon"
+          type="image/x-icon"
+          href="../assets/images/favicon.ico">
+
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <i data-lucide="send"></i>
+            AMS
+        </div>
+
+        <ul class="sidebar-menu">
+
+            <li>
+                <a href="../dashboard/dashboard.html">
+                    <i data-lucide="layout-dashboard"></i>
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="contacts.html"
+                   class="active">
+                    <i data-lucide="users"></i>
+                    Contacts
+                </a>
+            </li>
+
+            <li>
+                <a href="../groups/groups.html">
+                    <i data-lucide="user-round-plus"></i>
+                    Groups
+                </a>
+            </li>
+
+            <li>
+                <a href="../templates/templates.html">
+                    <i data-lucide="file-text"></i>
+                    Templates
+                </a>
+            </li>
+
+            <li>
+                <a href="../campaigns/campaigns.html">
+                    <i data-lucide="megaphone"></i>
+                    Campaigns
+                </a>
+            </li>
+
+            <li>
+                <a href="../queue/queue.html">
+                    <i data-lucide="list-ordered"></i>
+                    Queue
+                </a>
+            </li>
+
+            <li>
+                <a href="../reports/reports.html">
+                    <i data-lucide="bar-chart-3"></i>
+                    Reports
+                </a>
+            </li>
+
+            <li>
+                <a href="../settings/settings.html">
+                    <i data-lucide="settings"></i>
+                    Settings
+                </a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+
+        <!-- Top Bar -->
+        <div class="topbar">
+
+            <h4 class="mb-0">
+                Contacts
+            </h4>
+
+            <div class="d-flex gap-2">
+
+                <button class="btn btn-outline-primary"
+                        id="btnImportContacts">
+                    <i data-lucide="upload"></i>
+                    Import Contacts
+                </button>
+
+                <button class="btn btn-primary"
+                        id="btnAddContact">
+                    <i data-lucide="plus"></i>
+                    Add Contact
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Content -->
+        <div class="page-content">
+
+            <!-- Toolbar -->
+            <div class="card shadow-soft mb-4">
+
+                <div class="card-body">
+
+                    <div class="row g-3 align-items-center">
+
+                        <div class="col-lg-5">
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    <i data-lucide="search"></i>
+                                </span>
+
+                                <input type="text"
+                                       id="searchContact"
+                                       class="form-control"
+                                       placeholder="Search contacts...">
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-3">
+
+                            <select class="form-select"
+                                    id="filterGroup">
+
+                                <option value="">
+                                    All Groups
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-lg-4 text-end">
+
+                            <span class="text-muted">
+                                Total Contacts :
+                            </span>
+
+                            <strong id="contactCount">0</strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Contacts -->
+            <div class="card shadow-soft">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead>
+
+                        <tr>
+
+                            <th>Name</th>
+
+                            <th>Phone</th>
+
+                            <th>Email</th>
+
+                            <th>Company</th>
+
+                            <th>Group</th>
+
+                            <th>Tags</th>
+
+                            <th width="140">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                        </thead>
+
+                        <tbody id="contactsTable">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="appFooter"></div>
+
+    </main>
+
+</div>
+
+<!-- =======================================================
+     IMPORT CONTACTS WIZARD
+======================================================= -->
+
+<div class="modal fade"
+     id="importWizard"
+     tabindex="-1">
+
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+
+                    <i data-lucide="upload-cloud"></i>
+
+                    Import Contacts
+
+                </h5>
+
+                <button class="btn-close"
+                        data-bs-dismiss="modal"></button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <!-- Stepper -->
+
+                <div class="wizard-steps mb-4">
+
+                    <div class="wizard-step active"
+                         data-step="1">
+
+                        <span>1</span>
+
+                        Upload
+
+                    </div>
+
+                    <div class="wizard-step"
+                         data-step="2">
+
+                        <span>2</span>
+
+                        Preview
+
+                    </div>
+
+                    <div class="wizard-step"
+                         data-step="3">
+
+                        <span>3</span>
+
+                        Mapping
+
+                    </div>
+
+                    <div class="wizard-step"
+                         data-step="4">
+
+                        <span>4</span>
+
+                        Import
+
+                    </div>
+
+                </div>
+
+                <!-- STEP 1 -->
+
+                <section id="stepUpload"
+                         class="wizard-page">
+
+                    <div id="uploadZone"
+                         class="upload-zone">
+
+                        <i data-lucide="file-up"
+                           class="upload-icon"></i>
+
+                        <h5 class="mt-3">
+
+                            Drag & Drop CSV or Excel File
+
+                        </h5>
+
+                        <p class="text-muted mb-4">
+
+                            Supported formats:
+                            <strong>.csv</strong>,
+                            <strong>.xlsx</strong>
+
+                        </p>
+
+                        <button class="btn btn-primary"
+                                id="btnBrowseFile"
+                                type="button">
+
+                            Browse File
+
+                        </button>
+
+                        <input type="file"
+                               id="importFile"
+                               accept=".csv,.xlsx"
+                               hidden>
+
+                    </div>
+
+                    <div id="selectedFile"
+                         class="mt-4 d-none"></div>
+
+                </section>
+
+                <!-- STEP 2 -->
+
+                <section id="stepPreview"
+                         class="wizard-page d-none">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <h5 class="mb-0">
+
+                            File Preview
+
+                        </h5>
+
+                        <span id="previewCount"
+                              class="badge bg-primary">
+
+                            0 Contacts
+
+                        </span>
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="table table-bordered table-sm">
+
+                            <thead id="previewHead"></thead>
+
+                            <tbody id="previewBody"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+                <!-- STEP 3 -->
+
+                <section id="stepMapping"
+                         class="wizard-page d-none">
+
+                    <h5 class="mb-3">
+
+                        Map File Columns
+
+                    </h5>
+
+                    <div id="mappingContainer"></div>
+
+                </section>
+
+                <!-- STEP 4 -->
+
+                <section id="stepImport"
+                         class="wizard-page d-none">
+
+                    <div class="text-center py-4">
+
+                        <h5>
+
+                            Import Progress
+
+                        </h5>
+
+                        <div class="progress mt-4">
+
+                            <div class="progress-bar"
+                                 id="importProgress"
+                                 role="progressbar"
+                                 style="width:0%">
+
+                                0%
+
+                            </div>
+
+                        </div>
+
+                        <div class="row text-center mt-4">
+
+                            <div class="col-md-4">
+
+                                <h3 id="importedCount">0</h3>
+
+                                <small>Imported</small>
+
+                            </div>
+
+                            <div class="col-md-4">
+
+                                <h3 id="duplicateCount">0</h3>
+
+                                <small>Duplicates</small>
+
+                            </div>
+
+                            <div class="col-md-4">
+
+                                <h3 id="invalidCount">0</h3>
+
+                                <small>Invalid</small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button class="btn btn-outline-secondary"
+                        id="btnPreviousStep"
+                        type="button">
+
+                    Previous
+
+                </button>
+
+                <button class="btn btn-primary"
+                        id="btnNextStep"
+                        type="button">
+
+                    Next
+
+                </button>
+
+                <button class="btn btn-success d-none"
+                        id="btnStartImport"
+                        type="button">
+
+                    Import Contacts
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="../assets/js/config.js?v=1.0"></script>
+
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/common.js"></script>
+<script src="../assets/js/branding.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<script src="contacts.js?v=1.0"></script>
+
+<script src="contact-import.js?v=1.0"></script>
+
+<script>
+    lucide.createIcons();
+</script>
+
+</body>
+</html>

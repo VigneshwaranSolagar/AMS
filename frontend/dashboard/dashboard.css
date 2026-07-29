@@ -1,0 +1,117 @@
+.dashboard-card {
+
+    border: none;
+
+    border-radius: 16px;
+
+    transition: all 0.3s ease;
+
+}
+
+
+
+.dashboard-card:hover {
+
+    transform: translateY(-5px);
+
+}
+
+
+
+.dashboard-card h6 {
+
+    color: var(--muted-color);
+
+    font-weight: 500;
+
+}
+
+
+
+.dashboard-card h2 {
+
+    font-size: 32px;
+
+    font-weight: 700;
+
+    margin-top: 10px;
+
+}
+
+
+
+.status-card {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+}
+
+
+
+.status-icon {
+
+    width: 45px;
+
+    height: 45px;
+
+    padding: 10px;
+
+    border-radius: 12px;
+
+}
+
+
+
+.recent-table {
+
+    font-size: 14px;
+
+}
+
+
+
+.recent-table th {
+
+    font-weight: 600;
+
+    color: var(--muted-color);
+
+}
+
+
+
+.badge-status {
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+}
+
+
+
+.chart-container {
+
+    height: 300px;
+
+}
+
+
+
+@media(max-width:768px) {
+
+
+    .dashboard-card h2 {
+
+        font-size: 26px;
+
+    }
+
+
+}

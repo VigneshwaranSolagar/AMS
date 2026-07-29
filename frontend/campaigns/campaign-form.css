@@ -1,0 +1,333 @@
+/* ===================================
+   Campaign Builder
+=================================== */
+
+.page-content {
+
+    padding: 24px;
+
+}
+
+
+
+.card {
+
+    border: none;
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
+}
+
+
+
+.card-header {
+
+    background: #f8fafc;
+
+    font-weight: 600;
+
+    color: #0f172a;
+
+    border-bottom: 1px solid #e2e8f0;
+
+    padding: 16px 20px;
+
+}
+
+
+
+.card-body {
+
+    padding: 20px;
+
+}
+
+
+
+.form-label {
+
+    font-weight: 500;
+
+    color: #334155;
+
+    margin-bottom: 8px;
+
+}
+
+
+
+.form-control,
+
+.form-select {
+
+    border-radius: 10px;
+
+    border: 1px solid #dbe2ea;
+
+    min-height: 46px;
+
+}
+
+
+
+.form-control:focus,
+
+.form-select:focus {
+
+    border-color: var(--primary-color);
+
+    box-shadow: 0 0 0 .15rem rgba(37,99,235,.15);
+
+}
+
+
+
+textarea.form-control {
+
+    min-height: 220px;
+
+    resize: vertical;
+
+}
+
+
+
+.whatsapp-preview {
+
+    background: #efeae2;
+
+    border-radius: 12px;
+
+    padding: 18px;
+
+    min-height: 350px;
+
+    white-space: pre-wrap;
+
+    word-break: break-word;
+
+    line-height: 1.6;
+
+    font-size: 14px;
+
+    color: #111827;
+
+    position: relative;
+
+}
+
+
+
+.whatsapp-preview::before {
+
+    content: "Preview";
+
+    position: absolute;
+
+    top: 10px;
+
+    right: 14px;
+
+    font-size: 11px;
+
+    color: #94a3b8;
+
+}
+
+
+
+.preview-bubble {
+
+    background: #dcf8c6;
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    display: inline-block;
+
+    max-width: 100%;
+
+}
+
+
+
+#attachmentPreview {
+
+    text-align: center;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    padding: 15px;
+
+}
+
+
+
+.sticky-top {
+
+    top: 24px;
+
+}
+
+
+
+.variable-chip {
+
+    display: inline-block;
+
+    margin: 3px;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    background: #dbeafe;
+
+    color: #1d4ed8;
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+}
+
+
+
+.info-box {
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+
+    padding: 15px;
+
+    margin-top: 15px;
+
+}
+
+
+
+.info-box h6 {
+
+    margin-bottom: 10px;
+
+    font-weight: 600;
+
+}
+
+
+
+.btn {
+
+    border-radius: 10px;
+
+    min-width: 130px;
+
+}
+
+
+
+.btn-warning {
+
+    color: white;
+
+}
+
+
+
+.section-space {
+
+    margin-bottom: 24px;
+
+}
+
+
+
+.target-box {
+
+    border: 1px dashed #cbd5e1;
+
+    border-radius: 10px;
+
+    padding: 16px;
+
+    background: #fafafa;
+
+}
+
+
+
+.target-box:hover {
+
+    border-color: var(--primary-color);
+
+}
+
+
+
+.upload-preview {
+
+    width: 100%;
+
+    max-height: 240px;
+
+    object-fit: contain;
+
+    border-radius: 10px;
+
+    margin-top: 10px;
+
+}
+
+
+
+.file-icon {
+
+    font-size: 50px;
+
+    color: #64748b;
+
+}
+
+
+
+.required {
+
+    color: #dc2626;
+
+}
+
+
+
+@media (max-width:992px) {
+
+    .sticky-top {
+
+        position: relative !important;
+
+        top: auto;
+
+        margin-top: 25px;
+
+    }
+
+}
+
+
+
+@media (max-width:768px) {
+
+    .page-content {
+
+        padding: 15px;
+
+    }
+
+}

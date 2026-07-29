@@ -1,0 +1,211 @@
+/* ===========================
+   Groups Page
+=========================== */
+
+.page-content {
+
+    padding: 25px;
+
+}
+
+
+
+.card {
+
+    border: none;
+
+    border-radius: 14px;
+
+}
+
+
+
+.table {
+
+    margin-bottom: 0;
+
+}
+
+
+
+.table thead {
+
+    background: #f8fafc;
+
+}
+
+
+
+.table thead th {
+
+    font-weight: 600;
+
+    color: #475569;
+
+    border-bottom: 2px solid #e2e8f0;
+
+    padding: 14px;
+
+}
+
+
+
+.table tbody td {
+
+    padding: 14px;
+
+    vertical-align: middle;
+
+}
+
+
+
+.table tbody tr {
+
+    transition: 0.25s;
+
+}
+
+
+
+.table tbody tr:hover {
+
+    background: #f8fafc;
+
+}
+
+
+
+.group-name {
+
+    font-weight: 600;
+
+    color: #0f172a;
+
+}
+
+
+
+.group-description {
+
+    color: #64748b;
+
+    font-size: 13px;
+
+}
+
+
+
+.contact-count {
+
+    display: inline-block;
+
+    background: #dbeafe;
+
+    color: #1d4ed8;
+
+    border-radius: 25px;
+
+    padding: 6px 14px;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+}
+
+
+
+.action-buttons {
+
+    display: flex;
+
+    gap: 8px;
+
+}
+
+
+
+.action-buttons button {
+
+    width: 36px;
+
+    height: 36px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition: 0.2s;
+
+}
+
+
+
+.btn-edit {
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+}
+
+
+
+.btn-edit:hover {
+
+    background: #2563eb;
+
+    color: white;
+
+}
+
+
+
+.btn-delete {
+
+    background: #fef2f2;
+
+    color: #dc2626;
+
+}
+
+
+
+.btn-delete:hover {
+
+    background: #dc2626;
+
+    color: white;
+
+}
+
+
+
+.empty-state {
+
+    text-align: center;
+
+    padding: 50px;
+
+    color: #64748b;
+
+}
+
+
+
+@media (max-width:768px) {
+
+    .page-content {
+
+        padding: 15px;
+
+    }
+
+}

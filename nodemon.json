@@ -1,0 +1,11 @@
+{
+  "watch": ["app", "database", "routes", "controllers", "models", "services", "middleware", "validators"],
+  "ignore": [
+    "auth/**",
+    "uploads/**",
+    "*.db",
+    "*.sqlite",
+    "node_modules/**"
+  ],
+  "ext": "js,json"
+}

@@ -1,0 +1,63 @@
+.login-container {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+
+.login-card {
+
+    width: 420px;
+
+    border-radius: 18px;
+
+    border: none;
+
+}
+
+
+
+.login-logo {
+
+    width: 60px;
+
+    height: 60px;
+
+    color: var(--primary-color);
+
+}
+
+
+
+.login-card .form-control {
+
+    height: 48px;
+
+}
+
+
+
+.login-card .btn {
+
+    height: 48px;
+
+    border-radius: 10px;
+
+}
+
+
+
+#loginMessage {
+
+    font-size: 14px;
+
+    font-weight: 500;
+
+}

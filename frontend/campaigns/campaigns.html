@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>
+
+        AMS - Campaigns
+
+    </title>
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Google Font -->
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Theme -->
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/theme.css">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/common.css">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/layout.css">
+
+    <link
+        rel="stylesheet"
+        href="campaigns.css">
+
+    <!-- Icons -->
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <i data-lucide="send"></i>
+
+            AMS
+
+        </div>
+
+        <ul class="sidebar-menu">
+
+            <li>
+
+                <a href="../dashboard/dashboard.html">
+
+                    <i data-lucide="layout-dashboard"></i>
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="../contacts/contacts.html">
+
+                    <i data-lucide="users"></i>
+
+                    Contacts
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="../groups/groups.html">
+
+                    <i data-lucide="folder-open"></i>
+
+                    Groups
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="../templates/templates.html">
+
+                    <i data-lucide="file-text"></i>
+
+                    Templates
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a
+                    href="campaigns.html"
+                    class="active">
+
+                    <i data-lucide="megaphone"></i>
+
+                    Campaigns
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="../queue/queue.html">
+
+                    <i data-lucide="list-ordered"></i>
+
+                    Queue
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="../reports/reports.html">
+
+                    <i data-lucide="bar-chart-3"></i>
+
+                    Reports
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="../settings/settings.html">
+
+                    <i data-lucide="settings"></i>
+
+                    Settings
+
+                </a>
+
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main -->
+
+    <main class="main-content">
+
+        <div class="topbar">
+
+            <h4>
+
+                Campaign Manager
+
+            </h4>
+
+            <button
+                id="btnCreateCampaign"
+                class="btn btn-primary">
+
+                <i data-lucide="plus"></i>
+
+                New Campaign
+
+            </button>
+
+        </div>
+
+        <div class="page-content">
+
+            <!-- Statistics -->
+
+            <div class="row mb-4">
+
+                <div class="col-lg-3">
+
+                    <div class="card stats-card">
+
+                        <div class="card-body">
+
+                            <h6>
+
+                                Total
+
+                            </h6>
+
+                            <h2 id="totalCampaigns">
+
+                                0
+
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <div class="card stats-card">
+
+                        <div class="card-body">
+
+                            <h6>
+
+                                Draft
+
+                            </h6>
+
+                            <h2 id="draftCampaigns">
+
+                                0
+
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <div class="card stats-card">
+
+                        <div class="card-body">
+
+                            <h6>
+
+                                Queued
+
+                            </h6>
+
+                            <h2 id="queuedCampaigns">
+
+                                0
+
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <div class="card stats-card">
+
+                        <div class="card-body">
+
+                            <h6>
+
+                                Completed
+
+                            </h6>
+
+                            <h2 id="completedCampaigns">
+
+                                0
+
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Campaign List -->
+
+            <div class="card shadow-soft">
+
+                <div class="card-body">
+
+                    <table
+                        class="table table-hover align-middle">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+
+                                    Campaign
+
+                                </th>
+
+                                <th>
+
+                                    Type
+
+                                </th>
+
+                                <th>
+
+                                    Target
+
+                                </th>
+
+                                <th>
+
+                                    Status
+
+                                </th>
+
+                                <th>
+
+                                    Scheduled
+
+                                </th>
+
+                                <th width="210">
+
+                                    Actions
+
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="campaignTable">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+                <div id="appFooter"></div>
+
+    </main>
+
+</div>
+
+<script src="../assets/js/api.js"></script>
+
+<script src="../assets/js/common.js"></script>
+
+<script src="../assets/js/branding.js"></script>
+
+<script src="campaigns.js"></script>
+
+<script>
+
+lucide.createIcons();
+
+</script>
+
+</body>
+
+</html>

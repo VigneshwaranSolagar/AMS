@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AMS - Group Form</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Theme -->
+    <link rel="stylesheet"
+          href="../assets/css/theme.css">
+
+    <link rel="stylesheet"
+          href="../assets/css/common.css">
+
+    <link rel="stylesheet"
+          href="../assets/css/layout.css">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <i data-lucide="send"></i>
+
+            AMS
+
+        </div>
+
+        <ul class="sidebar-menu">
+
+            <li>
+                <a href="../dashboard/dashboard.html">
+                    <i data-lucide="layout-dashboard"></i>
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="../contacts/contacts.html">
+                    <i data-lucide="users"></i>
+                    Contacts
+                </a>
+            </li>
+
+            <li>
+                <a href="groups.html" class="active">
+                    <i data-lucide="folder-open"></i>
+                    Groups
+                </a>
+            </li>
+
+            <li>
+                <a href="../campaigns/campaigns.html">
+                    <i data-lucide="megaphone"></i>
+                    Campaigns
+                </a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main -->
+
+    <main class="main-content">
+
+        <div class="topbar">
+
+            <h4 id="pageTitle">
+
+                Create Group
+
+            </h4>
+
+        </div>
+
+        <div class="page-content">
+
+            <div class="card shadow-soft">
+
+                <div class="card-body">
+
+                    <form id="groupForm">
+
+                        <input
+                            type="hidden"
+                            id="groupId">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Group Name
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="group_name"
+                                class="form-control"
+                                required>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+
+                                Description
+
+                            </label>
+
+                            <textarea
+                                id="description"
+                                rows="4"
+                                class="form-control"></textarea>
+
+                        </div>
+
+                        <div class="text-end">
+
+                            <a
+                                href="groups.html"
+                                class="btn btn-secondary">
+
+                                Cancel
+
+                            </a>
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary">
+
+                                Save Group
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+        <div id="appFooter"></div>
+
+    </main>
+
+</div>
+
+<script src="../assets/js/api.js"></script>
+
+<script src="../assets/js/common.js"></script>
+
+<script src="../assets/js/branding.js"></script>
+
+
+<script src="group-form.js"></script>
+
+<script>
+
+lucide.createIcons();
+
+</script>
+
+</body>
+
+</html>
