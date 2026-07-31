@@ -42,7 +42,9 @@ exports.getContacts = async (req, res) => {
 
     try {
 
-        const contacts = await contactModel.getAll();
+        const { group_id, search } = req.query;
+
+        const contacts = await contactModel.getAll(group_id, search);
 
         res.json({
             success: true,
@@ -249,3 +251,35 @@ exports.previewImport = async (req, res) => {
     }
 
 };
+
+exports.removeFromGroup = async (req, res) => {
+
+    try {
+
+        await contactModel.updateGroup(
+            req.params.id,
+            null
+        );
+
+
+        res.json({
+            success:true,
+            message:"Contact removed from group."
+        });
+
+
+    }
+    catch(err){
+
+        res.status(500).json({
+
+            success:false,
+
+            message:err.message
+
+        });
+
+    }
+
+};
+

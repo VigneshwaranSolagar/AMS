@@ -102,7 +102,9 @@ textarea.form-control {
 
     padding: 18px;
 
-    min-height: 350px;
+    min-height: 420px;
+
+    width: 100%;
 
     white-space: pre-wrap;
 

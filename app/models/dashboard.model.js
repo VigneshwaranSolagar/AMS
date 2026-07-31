@@ -10,13 +10,11 @@ async function getDashboardStats() {
 
     // Groups are derived from contacts in MVP
     const groups = await db.get(
-        `
-        SELECT COUNT(DISTINCT group_name) AS total
-        FROM contacts
-        WHERE group_name IS NOT NULL
-        AND TRIM(group_name) <> ''
-        `
-    );
+    `
+    SELECT COUNT(*) AS total
+    FROM contact_groups
+    `
+);
 
     const templates = await db.get(
         "SELECT COUNT(*) AS total FROM message_templates"
@@ -43,18 +41,18 @@ async function getDashboardStats() {
     );
 
     const pendingQueue = await db.get(
-        `
-        SELECT COUNT(*) AS total
-        FROM message_queue
-        WHERE status='PENDING'
-        `
-    );
+    `
+    SELECT COUNT(*) AS total
+    FROM message_queue
+    WHERE UPPER(status)='pending'
+    `
+);
 
     const sentMessages = await db.get(
     `
     SELECT COUNT(*) AS total
     FROM message_queue
-    WHERE status='SENT'
+    WHERE UPPER(status)='SENT'
     `
 );
 
@@ -62,7 +60,7 @@ const failedMessages = await db.get(
     `
     SELECT COUNT(*) AS total
     FROM message_queue
-    WHERE status='FAILED'
+    WHERE UPPER(status)='FAILED'
     `
 );
 

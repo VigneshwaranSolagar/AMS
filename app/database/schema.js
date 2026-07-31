@@ -22,7 +22,7 @@ async function initializeDatabase() {
         email TEXT,
         company TEXT,
         tags TEXT,
-        group_name TEXT,
+        group_id INTEGER,
         notes TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
@@ -35,20 +35,43 @@ async function initializeDatabase() {
     );
 
     CREATE TABLE IF NOT EXISTS campaigns (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        campaign_name TEXT NOT NULL,
-        message TEXT NOT NULL,
-        attachment TEXT,
-        campaign_type TEXT NOT NULL,
-        target_type TEXT NOT NULL,
-        target_value TEXT,
-        scheduled_at DATETIME,
-        status TEXT DEFAULT 'Draft',
-        created_by INTEGER,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    campaign_name TEXT NOT NULL,
+
+    template_id INTEGER,
+
+    message TEXT NOT NULL,
+
+    attachment TEXT,
+
+    attachment_name TEXT,
+
+    attachment_type TEXT,
+
+    mime_type TEXT,
+
+    file_size INTEGER,
+
+    campaign_type TEXT NOT NULL,
+
+    target_type TEXT NOT NULL,
+
+    target_value TEXT,
+
+    scheduled_at DATETIME,
+
+    status TEXT DEFAULT 'Draft',
+
+    created_by INTEGER,
+
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+
     );
 
     CREATE TABLE IF NOT EXISTS message_templates (
+
     id INTEGER PRIMARY KEY AUTOINCREMENT,
 
     template_name TEXT UNIQUE NOT NULL,
@@ -57,12 +80,23 @@ async function initializeDatabase() {
 
     message TEXT NOT NULL,
 
+    attachment TEXT,
+
+    attachment_name TEXT,
+
+    attachment_type TEXT,
+
+    mime_type TEXT,
+
+    file_size INTEGER,
+
     created_by INTEGER,
 
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
 
-CREATE TABLE IF NOT EXISTS message_queue (
+    );
+
+    CREATE TABLE IF NOT EXISTS message_queue (
 
     id INTEGER PRIMARY KEY AUTOINCREMENT,
 
@@ -84,12 +118,14 @@ CREATE TABLE IF NOT EXISTS message_queue (
 
     processed_at DATETIME
 
-);
+    );
 
     `);
 
     console.log("✅ Database schema initialized.");
 
 }
+
+
 
 module.exports = initializeDatabase;

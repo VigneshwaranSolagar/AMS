@@ -33,8 +33,6 @@ function initializeContacts() {
 
     loadContacts();
 
-    loadGroups();
-
     setupEvents();
 
 
@@ -96,7 +94,12 @@ function setupEvents() {
         openImportWizard
     );
 
-
+    document
+    .getElementById("btnManageGroups")
+    ?.addEventListener(
+        "click",
+        openGroupsModal
+    );
 
 
 
@@ -104,8 +107,13 @@ function setupEvents() {
     .getElementById("btnAddContact")
     ?.addEventListener(
         "click",
-        openAddContact
-    );
+     () => {
+
+        window.location.href =
+            "contact-form.html";
+
+    }
+);
 
 
 }
@@ -125,60 +133,39 @@ LOAD CONTACTS
 
 async function loadContacts() {
 
-
     try {
-
 
         const search =
             document
             .getElementById("searchContact")
             ?.value || "";
 
-
-
         const group =
             document
             .getElementById("filterGroup")
             ?.value || "";
 
-
-
-
         let endpoint =
             `/contacts?page=${currentPage}`;
 
-
-
-        if(search) {
+        if (search) {
 
             endpoint +=
-            `&search=${encodeURIComponent(search)}`;
+                `&search=${encodeURIComponent(search)}`;
 
         }
 
-
-
-        if(group) {
+        if (group) {
 
             endpoint +=
-            `&group=${group}`;
+                `&group_id=${group}`;
 
         }
-
-
-
-
-
 
         const result =
-            await apiRequest(
-                endpoint
-            );
+            await apiRequest(endpoint);
 
-
-
-
-        if(!result.success) {
+        if (!result.success) {
 
             throw new Error(
                 result.message ||
@@ -187,44 +174,29 @@ async function loadContacts() {
 
         }
 
-
-
-
-
         contacts =
             result.data || [];
-
-
 
         totalPages =
             result.totalPages || 1;
 
-
-
         renderContacts();
-
-
 
         updateCount(
             result.total ||
             contacts.length
         );
 
-
-
     }
 
-    catch(error) {
-
+    catch (error) {
 
         console.error(
             "Load contacts failed:",
             error
         );
 
-
     }
-
 
 }
 
@@ -464,114 +436,6 @@ function renderContacts() {
 
 }
 
-
-
-
-
-
-
-
-
-/*
-==================================================
-GROUP FILTER
-==================================================
-*/
-
-
-async function loadGroups() {
-
-
-    try {
-
-
-        const result =
-            await apiRequest(
-                "/groups"
-            );
-
-
-
-        if(!result.success)
-            return;
-
-
-
-        const groups =
-            result.data || [];
-
-
-
-
-        const select =
-            document.getElementById(
-                "filterGroup"
-            );
-
-
-
-        if(!select)
-            return;
-
-
-
-
-        groups.forEach(
-            group => {
-
-
-                const option =
-                    document.createElement(
-                        "option"
-                    );
-
-
-                option.value =
-                    group.id;
-
-
-
-                option.textContent =
-                    group.group_name ||
-                    group.name;
-
-
-
-                select.appendChild(
-                    option
-                );
-
-
-            }
-        );
-
-
-
-    }
-
-    catch(error) {
-
-
-        console.error(
-            "Group loading failed:",
-            error
-        );
-
-
-    }
-
-
-}
-
-
-
-
-
-
-
-
-
-
 /*
 ==================================================
 DELETE
@@ -666,12 +530,8 @@ function openAddContact() {
 
 function editContact(id) {
 
-
-    console.log(
-        "Edit contact:",
-        id
-    );
-
+    window.location.href =
+        `contact-form.html?id=${id}`;
 
 }
 

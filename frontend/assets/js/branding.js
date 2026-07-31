@@ -13,11 +13,11 @@ footer.innerHTML = `
 <div class="app-footer">
 
 <span>
-AMS Trial v0.9.0 Beta
+AMS 
 </span>
 
 <span>
-A VinSolve Innovation
+A VinSolve Solution
 </span>
 
 <span>

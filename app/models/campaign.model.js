@@ -1,16 +1,20 @@
 const connectDatabase = require("../database/database");
 
+
 async function create(campaign) {
 
     const db = await connectDatabase();
 
     return db.run(
+
         `
         INSERT INTO campaigns
         (
             campaign_name,
             message,
             attachment,
+            attachment_name,
+            mime_type,
             campaign_type,
             target_type,
             target_value,
@@ -18,22 +22,41 @@ async function create(campaign) {
             status,
             created_by
         )
-        VALUES (?,?,?,?,?,?,?,?,?)
+        VALUES
+        (
+            ?,?,?,?,?,?,?,?,?,?,?
+        )
         `,
         [
+
             campaign.campaign_name,
+
             campaign.message,
+
             campaign.attachment,
+
+            campaign.attachment_name,
+
+            campaign.mime_type,
+
             campaign.campaign_type,
+
             campaign.target_type,
+
             campaign.target_value,
+
             campaign.scheduled_at,
+
             campaign.status || "Draft",
+
             campaign.created_by
+
         ]
+
     );
 
 }
+
 
 async function getAll() {
 
@@ -48,6 +71,7 @@ async function getAll() {
     );
 
 }
+
 
 async function getById(id) {
 
@@ -64,38 +88,70 @@ async function getById(id) {
 
 }
 
+
 async function update(id, campaign) {
 
     const db = await connectDatabase();
 
     return db.run(
+
         `
         UPDATE campaigns
         SET
+
             campaign_name=?,
+
             message=?,
+
             attachment=?,
+
+            attachment_name=?,
+
+            mime_type=?,
+
             campaign_type=?,
+
             target_type=?,
+
             target_value=?,
+
             scheduled_at=?,
+
             status=?
+
         WHERE id=?
         `,
+
         [
+
             campaign.campaign_name,
+
             campaign.message,
+
             campaign.attachment,
+
+            campaign.attachment_name,
+
+            campaign.mime_type,
+
             campaign.campaign_type,
+
             campaign.target_type,
+
             campaign.target_value,
+
             campaign.scheduled_at,
+
             campaign.status,
+
             id
+
         ]
+
     );
 
 }
+
 
 async function remove(id) {
 
@@ -110,6 +166,7 @@ async function remove(id) {
     );
 
 }
+
 
 async function getPendingCampaigns() {
 
@@ -136,7 +193,8 @@ async function getPendingCampaigns() {
 
 }
 
-async function updateStatus(id, status) {
+
+async function updateStatus(id,status) {
 
     const db = await connectDatabase();
 
@@ -152,13 +210,16 @@ async function updateStatus(id, status) {
         ]
     );
 
+
     console.log(
         `Campaign ${id} -> ${status} (Rows Updated: ${result.changes})`
     );
 
+
     return result;
 
 }
+
 
 module.exports = {
     create,

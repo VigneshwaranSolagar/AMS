@@ -1,89 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
 <head>
 
-
 <meta charset="UTF-8">
-
 
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-
 <title>AMS - Settings</title>
-
-
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
 rel="stylesheet">
 
-
-
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
 rel="stylesheet">
-
-
 
 <link rel="stylesheet"
 href="../assets/css/theme.css">
 
-
 <link rel="stylesheet"
 href="../assets/css/common.css">
-
 
 <link rel="stylesheet"
 href="../assets/css/layout.css">
 
-
-
 <link rel="stylesheet"
 href="settings.css">
 
-
-
 <script src="https://unpkg.com/lucide@latest"></script>
 
-
 </head>
-
 
 
 <body>
 
 
-
 <div class="app-layout">
-
 
 
 <!-- Sidebar -->
 
-
 <aside class="sidebar">
-
 
 
 <div class="logo">
 
 <i data-lucide="send"></i>
 
-AMS 
+AMS
 
 </div>
-
-
 
 
 
 <ul class="sidebar-menu">
 
 
-
 <li>
-
 <a href="../dashboard/dashboard.html">
 
 <i data-lucide="layout-dashboard"></i>
@@ -91,15 +65,10 @@ AMS
 Dashboard
 
 </a>
-
 </li>
 
 
-
-
-
 <li>
-
 <a href="../contacts/contacts.html">
 
 <i data-lucide="users"></i>
@@ -107,31 +76,10 @@ Dashboard
 Contacts
 
 </a>
-
 </li>
 
 
-
-
-
 <li>
-
-<a href="../groups/groups.html">
-
-<i data-lucide="folder-open"></i>
-
-Groups
-
-</a>
-
-</li>
-
-
-
-
-
-<li>
-
 <a href="../templates/templates.html">
 
 <i data-lucide="file-text"></i>
@@ -139,15 +87,10 @@ Groups
 Templates
 
 </a>
-
 </li>
 
 
-
-
-
 <li>
-
 <a href="../campaigns/campaigns.html">
 
 <i data-lucide="megaphone"></i>
@@ -155,15 +98,10 @@ Templates
 Campaigns
 
 </a>
-
 </li>
 
 
-
-
-
 <li>
-
 <a href="../queue/queue.html">
 
 <i data-lucide="list-ordered"></i>
@@ -171,15 +109,10 @@ Campaigns
 Queue
 
 </a>
-
 </li>
 
 
-
-
-
 <li>
-
 <a href="../reports/reports.html">
 
 <i data-lucide="bar-chart-3"></i>
@@ -187,11 +120,7 @@ Queue
 Reports
 
 </a>
-
 </li>
-
-
-
 
 
 <li>
@@ -208,9 +137,7 @@ Settings
 </li>
 
 
-
 </ul>
-
 
 
 </aside>
@@ -218,15 +145,10 @@ Settings
 
 
 
-
-
-
-<!-- Main Content -->
+<!-- Main -->
 
 
 <main class="main-content">
-
-
 
 
 
@@ -241,20 +163,21 @@ Settings
 
 
 
-
 <div>
 
 
-<span class="badge bg-success">
+<span 
+id="whatsappStatusBadge"
+class="badge bg-secondary">
 
-🟢 WhatsApp Connected
+Checking WhatsApp...
 
 </span>
 
 
 
-
-<button class="btn btn-sm btn-outline-secondary ms-3"
+<button
+class="btn btn-sm btn-outline-secondary ms-3"
 onclick="logout()">
 
 Logout
@@ -262,13 +185,10 @@ Logout
 </button>
 
 
-
 </div>
 
 
-
 </div>
-
 
 
 
@@ -279,13 +199,13 @@ Logout
 
 
 
+<!-- WhatsApp Configuration -->
 
 
 <div class="card shadow-soft p-4">
 
 
-
-<h5>
+<h5 class="mb-4">
 
 WhatsApp Configuration
 
@@ -294,20 +214,69 @@ WhatsApp Configuration
 
 
 
-<div class="mb-3">
+<div class="row g-3">
 
+
+<div class="col-md-6">
 
 <label class="form-label">
 
-Phone Number
+Connection Status
 
 </label>
 
 
-<input
-id="phone"
-class="form-control"
-placeholder="Enter WhatsApp number">
+<div id="whatsappStatus"
+class="form-control bg-light">
+
+Checking...
+
+</div>
+
+</div>
+
+
+
+
+<div class="col-md-6">
+
+<label class="form-label">
+
+WhatsApp Number
+
+</label>
+
+
+<div id="whatsappNumber"
+class="form-control bg-light">
+
+Not Connected
+
+</div>
+
+</div>
+
+
+
+
+<div class="col-md-6">
+
+<label class="form-label">
+
+Connected Since
+
+</label>
+
+
+<div id="connectedTime"
+class="form-control bg-light">
+
+-
+
+</div>
+
+</div>
+
 
 
 </div>
@@ -317,46 +286,42 @@ placeholder="Enter WhatsApp number">
 
 
 
-
-<div class="mb-3">
-
-
-<label class="form-label">
-
-API Status
-
-</label>
+<div class="mt-4">
 
 
-<select
-id="status"
-class="form-select">
+<button
+id="btnConnectWhatsapp"
+class="btn btn-success">
 
+<i data-lucide="qr-code"></i>
 
-<option>
-Connected
-</option>
+Connect WhatsApp
 
-
-<option>
-Disconnected
-</option>
-
-
-</select>
-
-
-</div>
+</button>
 
 
 
 
+<button
+id="btnChangeWhatsapp"
+class="btn btn-warning ms-2">
+
+<i data-lucide="refresh-cw"></i>
+
+Change WhatsApp
+
+</button>
 
 
-<button class="btn btn-primary"
-onclick="saveSettings()">
 
-Save Settings
+
+<button
+id="btnDisconnectWhatsapp"
+class="btn btn-danger ms-2">
+
+<i data-lucide="log-out"></i>
+
+Disconnect
 
 </button>
 
@@ -370,18 +335,61 @@ Save Settings
 
 
 
+<!-- QR Section -->
+
+
+<div
+id="qrContainer"
+class="text-center mt-4"
+style="display:none;">
+
+
+
+<h6>
+
+Scan QR using WhatsApp
+
+</h6>
+
+
+
+<img
+id="whatsappQR"
+style="width:260px;">
+
+
+
+<p class="text-muted mt-2">
+
+WhatsApp → Linked Devices → Link Device
+
+</p>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<!-- About AMS -->
 
 
 <div class="card shadow-soft p-4 mt-4">
 
 
-
 <h5>
 
-About AMS 
+About AMS
 
 </h5>
-
 
 
 
@@ -390,7 +398,8 @@ About AMS
 <strong>
 Product:
 </strong>
-AMS 
+
+AMS
 
 </p>
 
@@ -401,6 +410,7 @@ AMS
 <strong>
 Version:
 </strong>
+
 0.9.0 Beta
 
 </p>
@@ -413,6 +423,7 @@ Version:
 <strong>
 Published by:
 </strong>
+
 VinSolve
 
 </p>
@@ -427,7 +438,6 @@ VinSolve
 </p>
 
 
-
 </div>
 
 
@@ -436,9 +446,10 @@ VinSolve
 
 
 </div>
+
+
 
 <div id="appFooter"></div>
-
 
 
 
@@ -452,9 +463,15 @@ VinSolve
 
 
 
-
 <script src="../assets/js/api.js"></script>
 
+<script src="../assets/js/common.js"></script>
+
+<script src="../assets/js/branding.js"></script>
+
+<script src="../assets/js/whatsapp.js"></script>
+
+<script src="settings.js"></script>
 
 
 <script>
@@ -463,15 +480,7 @@ lucide.createIcons();
 
 </script>
 
-<script src="../assets/js/branding.js"></script>
-
-
-<script src="settings.js"></script>
-
-
-
 
 </body>
-
 
 </html>

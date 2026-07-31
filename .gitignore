@@ -20,9 +20,13 @@ uploads/*
 !uploads/.gitkeep
 
 # WhatsApp Sessions
+auth/
+auth_backup/
 auth_info/
 sessions/
 .baileys/
+app/auth/
+app/auth_backup/
 app/auth_info/
 app/sessions/
 
@@ -35,6 +39,12 @@ out/
 .vscode/
 .idea/
 
+# Temporary
+temp/
+.cache/
+
 # OS
 .DS_Store
 Thumbs.db
+
+app/uploads/*

@@ -101,8 +101,7 @@ async function loadGroups() {
 
 
 
-        groups.forEach(group => {
-
+        groups.forEach((group, index) => {
             tbody.innerHTML +=
 
             `
@@ -110,7 +109,7 @@ async function loadGroups() {
 
                 <td>
 
-                    ${group.id}
+                 ${index + 1}
 
                 </td>
 

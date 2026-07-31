@@ -325,8 +325,7 @@ function editCampaign(id) {
 
 function previewCampaign(id) {
 
-    window.location.href =
-        `campaign-preview.html?id=${id}`;
+    alert("Campaign Preview coming soon");
 
 }
 

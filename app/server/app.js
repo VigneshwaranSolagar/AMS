@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const path = require("path");  
 
 const authRoutes = require("../routes/auth.routes");
 const contactRoutes = require("../routes/contact.routes");
@@ -11,11 +12,14 @@ const queueRoutes = require("../routes/queue.routes");
 const whatsappRoutes = require("../routes/whatsapp.routes");
 const dashboardRoutes =require("../routes/dashboard.routes");
 const campaignHistoryRoutes =require("../routes/campaignHistory.routes");
-    
+ const reportsRoutes = require("../routes/reports.routes");
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use( "/uploads",express.static(path.join(__dirname, "../uploads")));
+
 
 app.get("/health", (req, res) => {
     res.json({
@@ -35,4 +39,5 @@ app.use("/api/queue", queueRoutes);
 app.use("/api/whatsapp", whatsappRoutes);
 app.use("/api/dashboard",dashboardRoutes);
 app.use("/api/campaign-history",campaignHistoryRoutes);
+app.use("/api/reports",reportsRoutes);
 module.exports = app;

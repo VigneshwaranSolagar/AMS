@@ -20,10 +20,21 @@ async function processQueue() {
 
             console.log(`Sending to ${job.phone}`);
 
-            await sender.sendText(
-                job.phone,
-                job.message
-            );
+            await sender.sendMessage({
+
+    phone: job.phone,
+
+    message: job.message,
+
+    attachment: job.attachment,
+
+    attachment_type: job.attachment_type,
+
+    mime_type: job.mime_type,
+
+    attachment_name: job.attachment_name
+
+});
 
             await queueModel.markSent(job.id);
 

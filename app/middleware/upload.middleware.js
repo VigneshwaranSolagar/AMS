@@ -1,68 +1,85 @@
 const multer = require("multer");
 const path = require("path");
 
+const paths = require("../config/paths");
+
 const storage = multer.diskStorage({
 
-    destination: function (req, file, cb) {
-
-        cb(null, "uploads/");
-
-    },
-
-    filename: function (req, file, cb) {
+    destination(req, file, cb) {
 
         cb(
             null,
-            Date.now() + path.extname(file.originalname)
+            paths.contacts
+        );
+
+    },
+
+    filename(req, file, cb) {
+
+        cb(
+
+            null,
+
+            Date.now() +
+
+            path.extname(file.originalname)
+
         );
 
     }
 
 });
-
 
 const upload = multer({
 
     storage,
 
-    fileFilter: function (req, file, cb) {
+    fileFilter(req, file, cb) {
 
         console.log(
+
             "UPLOAD FILE:",
+
             file.originalname,
+
             file.mimetype
+
         );
 
+        const ext =
 
-        const ext = path
-            .extname(file.originalname)
+            path.extname(file.originalname)
+
             .toLowerCase();
 
+        const allowed = [
 
-        const allowedExtensions = [
             ".csv",
+
             ".xlsx",
+
             ".xls"
+
         ];
 
+        if (allowed.includes(ext)) {
 
-        if (allowedExtensions.includes(ext)) {
-
-            cb(null, true);
-
-        } else {
-
-            cb(
-                new Error(
-                    "Only CSV or Excel files are allowed."
-                )
-            );
+            return cb(null, true);
 
         }
+
+        cb(
+
+            new Error(
+
+                "Only CSV or Excel files are allowed."
+
+            )
+
+        );
 
     }
 
 });
-
 
 module.exports = upload;

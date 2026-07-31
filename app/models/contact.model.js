@@ -52,11 +52,27 @@ async function create(contact) {
 
     const db = await connectDatabase();
 
-    const groupId =
-        await getGroupId(
-            db,
-            contact.group_name
-        );
+
+    let groupId = null;
+
+
+    if(contact.group_id){
+
+        groupId =
+            contact.group_id;
+
+    }
+    else if(contact.group_name){
+
+        groupId =
+            await getGroupId(
+                db,
+                contact.group_name
+            );
+
+    }
+
+
 
     return db.run(
 
@@ -101,30 +117,65 @@ async function create(contact) {
 
 
 
-async function getAll() {
+async function getAll(groupId = null, search = "") {
 
     const db = await connectDatabase();
 
-    return db.all(
-
-        `
+    let sql = `
         SELECT
-
             contacts.*,
-
             contact_groups.group_name
-
         FROM contacts
-
         LEFT JOIN contact_groups
-
         ON contacts.group_id = contact_groups.id
+        WHERE 1 = 1
+    `;
 
+    const params = [];
+
+    if (groupId) {
+
+        sql += `
+            AND contacts.group_id = ?
+        `;
+
+        params.push(groupId);
+
+    }
+
+    if (search && search.trim() !== "") {
+
+        sql += `
+            AND (
+                contacts.first_name LIKE ?
+                OR contacts.last_name LIKE ?
+                OR contacts.phone LIKE ?
+                OR contacts.email LIKE ?
+                OR contacts.company LIKE ?
+                OR contacts.tags LIKE ?
+                OR contact_groups.group_name LIKE ?
+            )
+        `;
+
+        const keyword = `%${search.trim()}%`;
+
+        params.push(
+            keyword,
+            keyword,
+            keyword,
+            keyword,
+            keyword,
+            keyword,
+            keyword
+        );
+
+    }
+
+    sql += `
         ORDER BY contacts.first_name
+    `;
 
-        `
-
-    );
+    return db.all(sql, params);
 
 }
 
@@ -228,11 +279,24 @@ async function update(id, contact) {
 
     const db = await connectDatabase();
 
-    const groupId =
+    let groupId = null;
+
+
+if(contact.group_id){
+
+    groupId =
+        contact.group_id;
+
+}
+else if(contact.group_name){
+
+    groupId =
         await getGroupId(
             db,
             contact.group_name
         );
+
+}
 
     return db.run(
 
@@ -339,6 +403,25 @@ async function getByGroupId(groupId) {
 
 }
 
+async function updateGroup(id, group_id) {
+
+    const db =
+        await connectDatabase();
+
+
+    return db.run(
+        `
+        UPDATE contacts
+        SET group_id = ?
+        WHERE id = ?
+        `,
+        [
+            group_id,
+            id
+        ]
+    );
+
+}
 
 
 module.exports = {
@@ -355,6 +438,8 @@ module.exports = {
 
     search,
 
-    getByGroupId
+    getByGroupId,
+
+    updateGroup
 
 };

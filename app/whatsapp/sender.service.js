@@ -1,48 +1,148 @@
-const { getSocket } = require("./whatsapp.service");
+const fs = require("fs");
+const path = require("path");
 
-async function sendText(phone, message) {
+const {
+    getSocket
+} = require("./whatsapp.service");
 
-    console.log("\n========== SEND TEXT ==========");
+async function sendMessage({
+
+    phone,
+
+    message,
+
+    attachment,
+
+    mime_type,
+
+    attachment_name
+
+}) {
+
+    console.log("\n=================================");
+    console.log("SEND MESSAGE()");
+    console.log("=================================");
+
+    console.log({
+        phone,
+        message,
+        attachment,
+        mime_type,
+        attachment_name
+    });
 
     const socket = getSocket();
 
-    console.log("Socket User:", socket.user);
+    if (!socket) {
+        throw new Error("WhatsApp socket not connected.");
+    }
 
-    phone = phone.replace(/\D/g, "");
+    phone = String(phone).replace(/\D/g, "");
 
-    // Default to India if only a 10-digit number is supplied
     if (phone.length === 10) {
         phone = "91" + phone;
     }
 
     const jid = `${phone}@s.whatsapp.net`;
 
-    console.log("Sending To:", jid);
-    console.log("Message:", message);
+    let payload;
+    let type = "TEXT";
 
-    try {
+    if (attachment) {
 
-        const result = await socket.sendMessage(jid, {
-            text: message
-        });
+        const filePath = path.join(__dirname,"..","uploads",attachment.replace(/^\/uploads\//, ""));
 
-        console.log("✅ Message Accepted By WhatsApp");
-        console.log("Message ID:", result.key.id);
-        console.log(result);
+        console.log("Attachment Path:", filePath);
 
-        return result;
+        if (!fs.existsSync(filePath)) {
+            throw new Error(`Attachment not found: ${filePath}`);
+        }
 
-    } catch (err) {
+        const buffer = fs.readFileSync(filePath);
 
-        console.error("❌ WhatsApp Error");
-        console.error(err);
+        console.log("Attachment Size:", buffer.length);
 
-        throw err;
+        type = (mime_type || "").split("/")[0];
+
+        if (type === "image") {
+
+            payload = {
+
+                image: buffer,
+
+                caption: message
+
+            };
+
+        }
+        else if (type === "video") {
+
+            payload = {
+
+                video: buffer,
+
+                caption: message
+
+            };
+
+        }
+        else if (type === "audio") {
+
+            payload = {
+
+                audio: buffer,
+
+                mimetype: mime_type
+
+            };
+
+        }
+        else {
+
+            payload = {
+
+                document: buffer,
+
+                mimetype: mime_type,
+
+                fileName: attachment_name,
+
+                caption: message
+
+            };
+
+        }
 
     }
+    else {
+
+        console.log("No attachment supplied.");
+
+        payload = {
+
+            text: message
+
+        };
+
+    }
+
+    console.log("---------------------------------");
+    console.log("Recipient:", jid);
+    console.log("Payload Keys:", Object.keys(payload));
+    console.log("Attachment Mode:", type);
+    console.log("---------------------------------");
+
+    const result = await socket.sendMessage(
+        jid,
+        payload
+    );
+
+    console.log("✅ WhatsApp Message ID:", result.key.id);
+
+    return result;
 
 }
 
 module.exports = {
-    sendText
+    sendMessage
 };

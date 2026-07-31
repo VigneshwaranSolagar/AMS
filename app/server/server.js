@@ -1,16 +1,20 @@
 const path = require("path");
 
+const express = require("express");
+
 const app = require("./app");
 
+const appConfig = require("../config/app.config");
+const version = require("../config/version");
+
 const initializeDatabase = require("../database/schema");
+const migrateGroups = require("../database/migrations/migration");
 const seedAdmin = require("../database/seed");
 
 const { startScheduler } = require("../scheduler/scheduler");
 const { startWhatsApp } = require("../whatsapp/whatsapp.service");
-
-const PORT = process.env.PORT || 3000;
-
-
+const logger = require("../utils/logger");
+const { runHealthCheck } = require("../startup/healthcheck");
 /*
 ==================================================
 SERVE FRONTEND
@@ -18,12 +22,17 @@ SERVE FRONTEND
 */
 
 app.use(
-    require("express").static(
-        path.join(__dirname, "../../frontend")
+
+    express.static(
+
+        path.join(
+            __dirname,
+            "../../frontend"
+        )
+
     )
+
 );
-
-
 
 /*
 ==================================================
@@ -35,50 +44,96 @@ async function start() {
 
     try {
 
+        console.log(
+            "\n================================="
+        );
 
-        // Database
+        console.log(
+            `${version.APP_NAME} ${version.VERSION}`
+        );
+
+        console.log(
+            `Build : ${version.BUILD}`
+        );
+
+        console.log(
+            `Company : ${version.COMPANY}`
+        );
+
+        console.log(
+            "=================================\n"
+        );
+
+        console.log(
+            "Initializing Database..."
+        );
+
         await initializeDatabase();
+        await runHealthCheck();
+        
+        console.log(
+            "Running Migrations..."
+        );
 
+        await migrateGroups();
 
-        // Default Admin
+        console.log(
+            "Creating Default Admin..."
+        );
+
         await seedAdmin();
 
-
-        // WhatsApp
-        await startWhatsApp();
-
-
-        // Scheduler
-        startScheduler();
-
-
-
         app.listen(
-            PORT,
-            () => {
+
+            appConfig.PORT,
+
+            async () => {
 
                 console.log(
-                    `🚀 AMS2 Server running on port ${PORT}`
+                    `🚀 Server running on port ${appConfig.PORT}`
                 );
 
                 console.log(
-                    `🌐 Application: http://localhost:${PORT}`
+                    `🌐 Application: http://localhost:${appConfig.PORT}`
+                );
+
+                console.log(
+                    "Starting WhatsApp..."
+                );
+
+                await startWhatsApp();
+
+                console.log(
+                    "Starting Scheduler..."
+                );
+
+                startScheduler();
+
+                console.log(
+                    "\n================================="
+                );
+
+                console.log(
+                    "AMS Startup Completed Successfully"
+                );
+
+                console.log(
+                    "=================================\n"
                 );
 
             }
-        );
 
+        );
 
     }
 
-    catch(error) {
-
+    catch (error) {
 
         console.error(
-            "Server startup failed:",
-            error
+            "\nServer startup failed:"
         );
 
+        console.error(error);
 
         process.exit(1);
 
@@ -86,6 +141,36 @@ async function start() {
 
 }
 
+/*
+==================================================
+GRACEFUL SHUTDOWN
+==================================================
+*/
 
+process.on(
+    "SIGINT",
+    () => {
+
+        console.log(
+            "\nStopping AMS..."
+        );
+
+        process.exit(0);
+
+    }
+);
+
+process.on(
+    "SIGTERM",
+    () => {
+
+        console.log(
+            "\nStopping AMS..."
+        );
+
+        process.exit(0);
+
+    }
+);
 
 start();

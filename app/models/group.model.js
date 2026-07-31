@@ -29,9 +29,28 @@ async function getAll() {
 
     return db.all(
         `
-        SELECT *
+        SELECT
+
+            contact_groups.id,
+
+            contact_groups.group_name,
+
+            contact_groups.description,
+
+            contact_groups.created_at,
+
+            COUNT(contacts.id) AS contact_count
+
         FROM contact_groups
-        ORDER BY group_name
+
+        LEFT JOIN contacts
+
+        ON contacts.group_id = contact_groups.id
+
+        GROUP BY contact_groups.id
+
+        ORDER BY contact_groups.group_name
+
         `
     );
 

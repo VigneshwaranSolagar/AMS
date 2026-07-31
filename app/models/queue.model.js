@@ -16,6 +16,10 @@ async function create(queue) {
             contact_id,
             phone,
             message,
+            attachment,
+            attachment_type,
+            attachment_name,
+            mime_type,
             status,
             retry_count,
             created_at
@@ -28,7 +32,11 @@ async function create(queue) {
             ?,
             ?,
             ?,
-            datetime('now')
+            ?,
+            ?,
+            'PENDING',
+            0,
+            CURRENT_TIMESTAMP
         )
         `,
         [
@@ -36,15 +44,19 @@ async function create(queue) {
             queue.contact_id,
             queue.phone,
             queue.message,
-            "PENDING",
-            0
+            queue.attachment,
+            queue.attachment_type,
+            queue.attachment_name,
+            queue.mime_type
         ]
     );
 
 }
 
+
+
 /* ===================================
-   Queue Processor
+   Get Pending Queue
 =================================== */
 
 async function getPending() {
@@ -54,20 +66,13 @@ async function getPending() {
     return db.all(
         `
         SELECT *
-
         FROM message_queue
-
-        WHERE status='PENDING'
-
+        WHERE status = 'PENDING'
         ORDER BY id ASC
         `
     );
 
 }
-
-/* ===================================
-   Queue Monitor
-=================================== */
 
 async function getAll() {
 
@@ -75,67 +80,55 @@ async function getAll() {
 
     return db.all(
         `
-        SELECT
+        SELECT *
 
-            q.id,
-            q.campaign_id,
-            q.contact_id,
+        FROM message_queue
 
-            c.campaign_name,
-
-            ct.first_name,
-            ct.last_name,
-
-            q.phone,
-            q.message,
-            q.status,
-            q.retry_count,
-            q.error_message,
-            q.created_at,
-            q.processed_at
-
-        FROM message_queue q
-
-        LEFT JOIN campaigns c
-            ON c.id=q.campaign_id
-
-        LEFT JOIN contacts ct
-            ON ct.id=q.contact_id
-
-        ORDER BY q.created_at DESC
+        ORDER BY id DESC
         `
     );
 
 }
 
 /* ===================================
-   Queue Details
+   Update Queue Status
 =================================== */
 
-async function getById(id) {
+async function updateStatus(id, status) {
 
     const db = await connectDatabase();
 
-    return db.get(
+    return db.run(
         `
-        SELECT
+        UPDATE message_queue
+        SET
+            status = ?,
+            processed_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+        `,
+        [
+            status,
+            id
+        ]
+    );
 
-            q.*,
+}
 
-            c.campaign_name,
+/* ===================================
+   Increment Retry Count
+=================================== */
 
-            ct.first_name,
-            ct.last_name
+async function incrementRetry(id) {
 
-        FROM message_queue q
+    const db = await connectDatabase();
 
-        LEFT JOIN campaigns c
-            ON c.id=q.campaign_id
-
-        LEFT JOIN contacts ct
-            ON ct.id=q.contact_id
-
-        WHERE q.id=?
+    return db.run(
+        `
+        UPDATE message_queue
+        SET
+            retry_count = retry_count + 1,
+            status = 'FAILED'
+        WHERE id = ?
         `,
         [id]
     );
@@ -143,8 +136,120 @@ async function getById(id) {
 }
 
 /* ===================================
-   Queue Status
+   Pending Count by Campaign
 =================================== */
+
+async function getPendingCountByCampaign(campaignId) {
+
+    const db = await connectDatabase();
+
+    const result = await db.get(
+        `
+        SELECT COUNT(*) AS total
+        FROM message_queue
+        WHERE
+            campaign_id = ?
+            AND status = 'PENDING'
+        `,
+        [campaignId]
+    );
+
+    return result.total;
+
+}
+
+/* ===================================
+   Queue Summary (Optional)
+=================================== */
+
+async function getSummary() {
+
+    const db = await connectDatabase();
+
+    return db.get(
+        `
+        SELECT
+            COUNT(*) AS total,
+            SUM(CASE WHEN status='PENDING' THEN 1 ELSE 0 END) AS pending,
+            SUM(CASE WHEN status='SENT' THEN 1 ELSE 0 END) AS sent,
+            SUM(CASE WHEN status='FAILED' THEN 1 ELSE 0 END) AS failed
+        FROM message_queue
+        `
+    );
+
+}
+
+async function getCampaignReport(campaignId) {
+
+    const db = await connectDatabase();
+
+    return db.get(
+        `
+        SELECT
+
+            COUNT(*) AS total,
+
+            SUM(
+                CASE 
+                    WHEN status='SENT'
+                    THEN 1
+                    ELSE 0
+                END
+            ) AS sent,
+
+            SUM(
+                CASE 
+                    WHEN status='FAILED'
+                    THEN 1
+                    ELSE 0
+                END
+            ) AS failed,
+
+            SUM(
+                CASE 
+                    WHEN status='PENDING'
+                    THEN 1
+                    ELSE 0
+                END
+            ) AS pending
+
+        FROM message_queue
+
+        WHERE campaign_id = ?
+
+        `,
+        [
+            campaignId
+        ]
+    );
+
+}
+
+
+async function getFailedContacts(campaignId) {
+
+    const db = await connectDatabase();
+
+    return db.all(
+        `
+        SELECT
+
+            phone,
+            error_message
+
+        FROM message_queue
+
+        WHERE
+            campaign_id = ?
+            AND status='FAILED'
+
+        `,
+        [
+            campaignId
+        ]
+    );
+
+}
 
 async function markSent(id) {
 
@@ -155,17 +260,22 @@ async function markSent(id) {
         UPDATE message_queue
 
         SET
-            status='SENT',
-            processed_at=datetime('now')
+            status = 'SENT',
+            processed_at = CURRENT_TIMESTAMP,
+            error_message = NULL
 
-        WHERE id=?
+        WHERE id = ?
         `,
-        [id]
+        [
+            id
+        ]
     );
 
 }
 
-async function markFailed(id, error) {
+
+
+async function markFailed(id, errorMessage) {
 
     const db = await connectDatabase();
 
@@ -174,24 +284,20 @@ async function markFailed(id, error) {
         UPDATE message_queue
 
         SET
-            status='FAILED',
-            error_message=?,
-            retry_count=retry_count+1,
-            processed_at=datetime('now')
+            status = 'FAILED',
+            error_message = ?,
+            processed_at = CURRENT_TIMESTAMP
 
-        WHERE id=?
+        WHERE id = ?
+
         `,
         [
-            error,
+            errorMessage,
             id
         ]
     );
 
 }
-
-/* ===================================
-   Campaign Queue
-=================================== */
 
 async function getPendingByCampaign(campaignId) {
 
@@ -203,69 +309,29 @@ async function getPendingByCampaign(campaignId) {
 
         FROM message_queue
 
-        WHERE campaign_id=?
+        WHERE
+            campaign_id = ?
+            AND status = 'PENDING'
 
-        AND status='PENDING'
         `,
-        [campaignId]
+        [
+            campaignId
+        ]
     );
-
-}
-
-/* ===================================
-   Queue Statistics
-=================================== */
-
-async function getStatistics() {
-
-    const db = await connectDatabase();
-
-    const total = await db.get(
-        `SELECT COUNT(*) total FROM message_queue`
-    );
-
-    const pending = await db.get(
-        `SELECT COUNT(*) total FROM message_queue WHERE status='PENDING'`
-    );
-
-    const sent = await db.get(
-        `SELECT COUNT(*) total FROM message_queue WHERE status='SENT'`
-    );
-
-    const failed = await db.get(
-        `SELECT COUNT(*) total FROM message_queue WHERE status='FAILED'`
-    );
-
-    return {
-
-        total: total.total,
-
-        pending: pending.total,
-
-        sent: sent.total,
-
-        failed: failed.total
-
-    };
 
 }
 
 module.exports = {
-
     create,
-
     getPending,
-
     getAll,
-
-    getById,
-
-    markSent,
-
-    markFailed,
-
+    updateStatus,
+    incrementRetry,
+    getPendingCountByCampaign,
     getPendingByCampaign,
-
-    getStatistics
-
+    markSent,
+    markFailed,
+    getSummary,
+    getCampaignReport,
+    getFailedContacts
 };

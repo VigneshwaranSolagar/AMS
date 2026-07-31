@@ -3,36 +3,32 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-    <title>AMS - Templates</title>
+<title>AMS - Templates</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-          rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+rel="stylesheet">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
 
-    <!-- Theme -->
-    <link rel="stylesheet"
-          href="../assets/css/theme.css">
+<link rel="stylesheet"
+href="../assets/css/theme.css">
 
-    <link rel="stylesheet"
-          href="../assets/css/common.css">
+<link rel="stylesheet"
+href="../assets/css/common.css">
 
-    <link rel="stylesheet"
-          href="../assets/css/layout.css">
+<link rel="stylesheet"
+href="../assets/css/layout.css">
 
-    <link rel="stylesheet"
-          href="templates.css">
+<link rel="stylesheet"
+href="templates.css">
 
-    <!-- Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
 
 </head>
 
@@ -40,210 +36,411 @@
 
 <div class="app-layout">
 
-    <!-- Sidebar -->
+<!-- Sidebar -->
 
-    <aside class="sidebar">
+<aside class="sidebar">
 
-        <div class="logo">
+<div class="logo">
 
-            <i data-lucide="send"></i>
+<i data-lucide="send"></i>
 
-            AMS
+AMS
 
-        </div>
+</div>
 
-        <ul class="sidebar-menu">
+<ul class="sidebar-menu">
 
-            <li>
+<li>
 
-                <a href="../dashboard/dashboard.html">
+<a href="../dashboard/dashboard.html">
 
-                    <i data-lucide="layout-dashboard"></i>
+<i data-lucide="layout-dashboard"></i>
 
-                    Dashboard
+Dashboard
 
-                </a>
+</a>
 
-            </li>
+</li>
 
-            <li>
+<li>
 
-                <a href="../contacts/contacts.html">
+<a href="../contacts/contacts.html">
 
-                    <i data-lucide="users"></i>
+<i data-lucide="users"></i>
 
-                    Contacts
+Contacts
 
-                </a>
+</a>
 
-            </li>
+</li>
 
-            <li>
+<li>
 
-                <a href="../groups/groups.html">
+<a class="active"
+href="templates.html">
 
-                    <i data-lucide="folder-open"></i>
+<i data-lucide="file-text"></i>
 
-                    Groups
+Templates
 
-                </a>
+</a>
 
-            </li>
+</li>
 
-            <li>
+<li>
 
-                <a href="templates.html"
-                   class="active">
+<a href="../campaigns/campaigns.html">
 
-                    <i data-lucide="file-text"></i>
+<i data-lucide="megaphone"></i>
 
-                    Templates
+Campaigns
 
-                </a>
+</a>
 
-            </li>
+</li>
 
-            <li>
+<li>
 
-                <a href="../campaigns/campaigns.html">
+<a href="../queue/queue.html">
 
-                    <i data-lucide="megaphone"></i>
+<i data-lucide="list-ordered"></i>
 
-                    Campaigns
+Queue
 
-                </a>
+</a>
 
-            </li>
+</li>
 
-            <li>
+<li>
 
-                <a href="../queue/queue.html">
+<a href="../reports/reports.html">
 
-                    <i data-lucide="list-ordered"></i>
+<i data-lucide="bar-chart-3"></i>
 
-                    Queue
+Reports
 
-                </a>
+</a>
 
-            </li>
+</li>
 
-            <li>
+<li>
 
-                <a href="../reports/reports.html">
+<a href="../settings/settings.html">
 
-                    <i data-lucide="bar-chart-3"></i>
+<i data-lucide="settings"></i>
 
-                    Reports
+Settings
 
-                </a>
+</a>
 
-            </li>
+</li>
 
-            <li>
+</ul>
 
-                <a href="../settings/settings.html">
+</aside>
 
-                    <i data-lucide="settings"></i>
 
-                    Settings
 
-                </a>
+<!-- Main -->
 
-            </li>
+<main class="main-content">
 
-        </ul>
+<div class="topbar">
 
-    </aside>
+<h4 class="mb-0">
 
+Message Templates
 
+</h4>
 
-    <!-- Main -->
+<button
+id="btnAddTemplate"
+class="btn btn-primary">
 
-    <main class="main-content">
+<i data-lucide="plus"></i>
 
-        <div class="topbar">
+New Template
 
-            <h4>
+</button>
 
-                Message Templates
+</div>
 
-            </h4>
 
-            <button
-                id="btnAddTemplate"
-                class="btn btn-primary">
 
-                <i data-lucide="plus"></i>
+<div class="page-content fade-in">
 
-                New Template
+<!-- Summary -->
 
-            </button>
+<div class="row g-3 mb-4">
 
-        </div>
+<div class="col-lg-3 col-md-6">
 
+<div class="stats-card">
 
+<div>
 
-        <div class="page-content">
+<p>Total Templates</p>
 
-            <div class="card shadow-soft">
+<h3 id="totalTemplates">
 
-                <div class="card-body">
+0
 
-                    <table class="table table-hover align-middle">
+</h3>
 
-                        <thead>
+</div>
 
-                            <tr>
+<div class="stats-icon">
 
-                                <th width="80">
+<i data-lucide="file-text"></i>
 
-                                    ID
+</div>
 
-                                </th>
+</div>
 
-                                <th>
+</div>
 
-                                    Template Name
 
-                                </th>
 
-                                <th>
+<div class="col-lg-3 col-md-6">
 
-                                    Preview
+<div class="stats-card">
 
-                                </th>
+<div>
 
-                                <th width="170">
+<p>Text</p>
 
-                                    Variables
+<h3 id="textTemplates">
 
-                                </th>
+0
 
-                                <th width="150">
+</h3>
 
-                                    Action
+</div>
 
-                                </th>
+<div class="stats-icon text-primary">
 
-                            </tr>
+<i data-lucide="message-square-text"></i>
 
-                        </thead>
+</div>
 
-                        <tbody id="templatesTable">
+</div>
 
-                        </tbody>
+</div>
 
-                    </table>
 
-                </div>
 
-            </div>
+<div class="col-lg-3 col-md-6">
 
-        </div>
+<div class="stats-card">
 
-        <div id="appFooter"></div>
+<div>
 
-    </main>
+<p>Media</p>
+
+<h3 id="mediaTemplates">
+
+0
+
+</h3>
+
+</div>
+
+<div class="stats-icon text-success">
+
+<i data-lucide="image"></i>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="col-lg-3 col-md-6">
+
+<div class="stats-card">
+
+<div>
+
+<p>Variables Used</p>
+
+<h3 id="variablesUsed">
+
+0
+
+</h3>
+
+</div>
+
+<div class="stats-icon text-warning">
+
+<i data-lucide="braces"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- Search -->
+
+<div class="card shadow-soft mb-4">
+
+<div class="card-body">
+
+<div class="row g-3 align-items-center">
+
+<div class="col-lg-6">
+
+<input
+type="text"
+id="searchTemplate"
+class="form-control"
+placeholder="Search templates...">
+
+</div>
+
+<div class="col-lg-3">
+
+<select
+id="filterType"
+class="form-select">
+
+<option value="">
+
+All Templates
+
+</option>
+
+<option value="TEXT">
+
+Text Only</option>
+
+<option value="IMAGE">
+
+Image</option>
+
+<option value="VIDEO">
+
+Video</option>
+
+<option value="DOCUMENT">
+
+Document</option>
+
+</select>
+
+</div>
+
+<div class="col-lg-3 text-end">
+
+<span
+class="badge bg-primary"
+id="templateCounter">
+
+0 Templates
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- Table -->
+
+<div class="card shadow-soft">
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead>
+
+<tr>
+
+<th width="70">
+
+S.No
+
+</th>
+
+<th width="240">
+
+Template
+
+</th>
+
+<th>
+
+Preview
+
+</th>
+
+<th width="220">
+
+Variables
+
+</th>
+
+<th width="170">
+
+Attachment
+
+</th>
+
+<th width="160">
+
+Actions
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="templatesTable">
+
+<tr>
+
+<td colspan="6"
+class="text-center py-5">
+
+Loading...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div id="appFooter"></div>
+
+</main>
 
 </div>
 

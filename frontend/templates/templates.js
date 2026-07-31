@@ -9,8 +9,6 @@ document.addEventListener(
     }
 );
 
-
-
 async function loadTemplates() {
 
     const tbody =
@@ -18,139 +16,118 @@ async function loadTemplates() {
             "templatesTable"
         );
 
-
-
-    tbody.innerHTML =
-
-        `
+    tbody.innerHTML = `
         <tr>
-
-            <td colspan="5"
-                class="text-center">
-
+            <td colspan="6" class="text-center">
                 Loading templates...
-
             </td>
-
         </tr>
-        `;
-
-
+    `;
 
     try {
 
         const response =
-            await apiRequest(
-                "/templates"
-            );
-
-
+            await apiRequest("/templates");
 
         if (!response.success) {
 
-            tbody.innerHTML =
-
-                `
+            tbody.innerHTML = `
                 <tr>
-
-                    <td colspan="5"
-                        class="text-center text-danger">
-
+                    <td colspan="6" class="text-center text-danger">
                         Failed to load templates.
-
                     </td>
-
                 </tr>
-                `;
+            `;
 
             return;
-
         }
-
-
 
         const templates =
             response.data || [];
 
+        // ===========================
+        // Update Dashboard Statistics
+        // ===========================
 
+        updateTemplateStats(templates);
 
         if (templates.length === 0) {
 
-            tbody.innerHTML =
-
-                `
+            tbody.innerHTML = `
                 <tr>
-
-                    <td colspan="5"
-                        class="text-center">
-
+                    <td colspan="6" class="text-center">
                         No templates found.
-
                     </td>
-
                 </tr>
-                `;
+            `;
 
             return;
 
         }
 
-
-
         tbody.innerHTML = "";
 
-
-
-        templates.forEach(template => {
+        templates.forEach((template, index) => {
 
             const variables =
                 extractVariables(
-                    template.message
+                    template.message || ""
                 );
 
-
-
-            tbody.innerHTML +=
-
-            `
+            tbody.innerHTML += `
             <tr>
 
-                <td>
+<td>
+${index+1}
+</td>
 
-                    ${template.id}
 
-                </td>
+<td>
 
-                <td>
+<div class="template-name">
 
-                    <div class="template-name">
+${template.template_name || "-"}
 
-                        ${template.template_name}
+</div>
 
-                    </div>
+</td>
 
-                </td>
 
-                <td>
+<td>
 
-                    <div class="template-preview">
+<div class="template-preview">
 
-                        ${template.message}
+${template.message || "-"}
 
-                    </div>
+</div>
 
-                </td>
+</td>
 
-                <td>
 
-                    ${variables}
+<td>
 
-                </td>
+${variables}
 
-                <td>
+</td>
 
-                    <div class="action-buttons">
 
+<td>
+
+${
+template.attachment ||
+template.attachment_path
+?
+`<i data-lucide="paperclip"></i>`
+:
+"-"
+}
+
+</td>
+
+
+<td>
+
+<div class="action-buttons">
                         <button
                             class="btn-edit"
                             onclick="editTemplate(${template.id})">
@@ -176,45 +153,100 @@ async function loadTemplates() {
 
         });
 
-
-
         lucide.createIcons();
 
     }
-
     catch (error) {
 
         console.error(error);
 
-        tbody.innerHTML =
-
-            `
+        tbody.innerHTML = `
             <tr>
-
-                <td colspan="5"
+                <td colspan="6"
                     class="text-center text-danger">
-
                     Unable to connect to server.
-
                 </td>
-
             </tr>
-            `;
+        `;
 
     }
 
 }
 
+/* =====================================
+   Dashboard Statistics
+===================================== */
 
+function updateTemplateStats(templates) {
+
+    const total =
+        templates.length;
+
+    const media =
+        templates.filter(t => t.attachment).length;
+
+    const text =
+        total - media;
+
+    let variableCount = 0;
+
+    templates.forEach(template => {
+
+        const matches =
+            (template.message || "")
+            .match(/{{(.*?)}}/g);
+
+        if (matches) {
+
+            variableCount += matches.length;
+
+        }
+
+    });
+
+    const totalCard =
+        document.getElementById("totalTemplates");
+
+    if (totalCard)
+        totalCard.textContent = total;
+
+    const counter =
+    document.getElementById("templateCounter");
+
+    if(counter)
+    {
+    counter.textContent =
+        `${total} Templates`;
+        }
+
+    const textCard =
+        document.getElementById("textTemplates");
+
+    if (textCard)
+        textCard.textContent = text;
+
+    const mediaCard =
+        document.getElementById("mediaTemplates");
+
+    if (mediaCard)
+        mediaCard.textContent = media;
+
+    const variableCard =
+        document.getElementById("variablesUsed");
+
+    if (variableCard)
+        variableCard.textContent = variableCount;
+
+}
+
+/* =====================================
+   Extract Variables
+===================================== */
 
 function extractVariables(message) {
 
     const matches =
-        message.match(
-            /{{(.*?)}}/g
-        );
-
-
+        message.match(/{{(.*?)}}/g);
 
     if (!matches) {
 
@@ -222,19 +254,17 @@ function extractVariables(message) {
 
     }
 
-
-
     return matches
         .map(variable =>
-
             `<span class="variable-badge">${variable}</span>`
-
         )
         .join("");
 
 }
 
-
+/* =====================================
+   Edit
+===================================== */
 
 function editTemplate(id) {
 
@@ -243,21 +273,17 @@ function editTemplate(id) {
 
 }
 
-
+/* =====================================
+   Delete
+===================================== */
 
 async function deleteTemplate(id) {
 
-    if (
-        !confirm(
-            "Delete this template?"
-        )
-    ) {
+    if (!confirm("Delete this template?")) {
 
         return;
 
     }
-
-
 
     const response =
         await apiRequest(
@@ -265,14 +291,11 @@ async function deleteTemplate(id) {
             "DELETE"
         );
 
-
-
     if (response.success) {
 
         await loadTemplates();
 
     }
-
     else {
 
         alert(
@@ -284,12 +307,12 @@ async function deleteTemplate(id) {
 
 }
 
-
+/* =====================================
+   Add Template
+===================================== */
 
 document
-    .getElementById(
-        "btnAddTemplate"
-    )
+    .getElementById("btnAddTemplate")
     ?.addEventListener(
         "click",
         () => {

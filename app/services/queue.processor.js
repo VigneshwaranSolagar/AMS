@@ -1,55 +1,102 @@
 const queueModel = require("../models/queue.model");
-const sender = require("../whatsapp/sender.service");
+const campaignModel = require("../models/campaign.model");
 
+const {
+    sendMessage
+} = require("../whatsapp/sender.service");
 
 async function processQueue() {
 
-    const jobs = await queueModel.getPending();
+    try {
 
-    console.log(`Pending Jobs: ${jobs.length}`);
+        const queue = await queueModel.getPending();
 
+        if (queue.length === 0) {
+            return;
+        }
 
-    for (const job of jobs) {
+        console.log(`Pending Queue : ${queue.length}`);
 
-        try {
+        for (const item of queue) {
 
-            console.log(`Sending to ${job.phone}`);
+            try {
 
+                console.log({
+                    attachment: item.attachment,
+                    attachment_name: item.attachment_name,
+                    mime_type: item.mime_type
+                });
 
-            await sender.sendText(
-                job.phone,
-                job.message
-            );
+                await sendMessage({
 
+                    phone: item.phone,
 
-            await queueModel.updateStatus(job.id,"SENT");
+                    message: item.message,
 
+                    attachment: item.attachment,
 
-            console.log(
-                `Sent Successfully: ${job.phone}`
-            );
+                    mime_type: item.mime_type,
 
+                    attachment_name: item.attachment_name
 
-        } catch (error) {
+                });
 
+                await queueModel.updateStatus(
+                    item.id,
+                    "SENT"
+                );
 
-            await queueModel.markFailed(
-                job.id,
-                error.message
-            );
+                console.log(
+                    `✅ Sent -> ${item.phone}`
+                );
 
+            }
+            catch (error) {
 
-            console.log(
-                `Failed: ${job.phone}`,
-                error.message
-            );
+                console.error(
+                    `❌ Failed -> ${item.phone}`,
+                    error.message
+                );
+
+                await queueModel.incrementRetry(
+                    item.id
+                );
+
+            }
+
+            // Check campaign completion
+
+            const pending =
+                await queueModel.getPendingCountByCampaign(
+                    item.campaign_id
+                );
+
+            if (pending === 0) {
+
+                await campaignModel.updateStatus(
+                    item.campaign_id,
+                    "Completed"
+                );
+
+                console.log(
+                    `🏁 Campaign ${item.campaign_id} Completed`
+                );
+
+            }
 
         }
 
     }
+    catch (error) {
+
+        console.error(
+            "Queue Processor Error:",
+            error
+        );
+
+    }
 
 }
-
 
 module.exports = {
     processQueue

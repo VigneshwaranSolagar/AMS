@@ -1,3 +1,11 @@
+console.log("CAMPAIGN FORM JS LOADED");
+
+console.log("CAMPAIGN FORM JS LOADED");
+
+console.log(
+    "buildPayload available:",
+    typeof buildPayload
+);
 // =====================================================
 // Campaign Builder
 // =====================================================
@@ -12,6 +20,9 @@ let editMode = false;
 
 let campaignId = null;
 
+let targetType = "All";
+
+let selectedTemplateAttachment = null;
 
 
 document.addEventListener(
@@ -20,11 +31,21 @@ document.addEventListener(
 
         protectPage();
 
+        targetType = "All";
+
+        const targetSelect =
+            document.getElementById("target_type");
+
+        if (targetSelect) {
+
+            targetSelect.value = "All";
+
+        }
+
         await initializePage();
 
     }
 );
-
 
 
 async function initializePage() {
@@ -82,80 +103,154 @@ async function initializePage() {
 
 async function bindEvents() {
 
-    document
-        .getElementById(
+
+    const campaignType =
+        document.getElementById(
             "campaign_type"
-        )
-        .addEventListener(
+        );
+
+
+    if (campaignType) {
+
+        campaignType.addEventListener(
             "change",
             toggleSchedule
         );
 
+    }
 
 
-    document
-        .getElementById(
-            "target_type"
-        )
-        .addEventListener(
-            "change",
-            renderTargetSelector
+
+    const targetTypeSelect =
+        document.getElementById(
+            "targetType"
         );
 
 
+    if (targetTypeSelect) {
 
-    document
-        .getElementById(
+        targetTypeSelect.addEventListener(
+            "change",
+            function () {
+
+                console.log(
+                    "Selected Target:",
+                    this.value
+                );
+
+
+                targetType =
+                    this.value;
+
+
+                renderTargetSelector();
+
+            }
+        );
+
+    }
+
+
+
+    const template =
+        document.getElementById(
             "template"
-        )
-        .addEventListener(
-            "change",
-            applyTemplate
         );
 
 
+    if (template) {
 
-    document
-        .getElementById(
+        template.addEventListener(
+            "change",
+            function () {
+
+                applyTemplate();
+
+            }
+        );
+
+    }
+
+
+
+    const message =
+        document.getElementById(
             "message"
-        )
-        .addEventListener(
+        );
+
+
+    if (message) {
+
+        message.addEventListener(
             "input",
             updatePreview
         );
 
+    }
 
 
-    document
-        .getElementById(
+
+    const attachment =
+        document.getElementById(
             "attachment"
-        )
-        .addEventListener(
+        );
+
+
+    if (attachment) {
+
+        attachment.addEventListener(
             "change",
             previewAttachment
         );
 
+    }
 
 
-    document
-        .getElementById(
+
+    const btnDraft =
+        document.getElementById(
             "btnDraft"
-        )
-        .addEventListener(
+        );
+
+
+    if (btnDraft) {
+
+        btnDraft.addEventListener(
             "click",
-            saveDraft
+            function (event) {
+
+                event.preventDefault();
+
+                saveDraft();
+
+            }
         );
 
+    }
 
 
-    document
-        .getElementById(
+
+    const campaignForm =
+        document.getElementById(
             "campaignForm"
-        )
-        .addEventListener(
-            "submit",
-            queueCampaign
         );
+
+
+    if (campaignForm) {
+
+        campaignForm.addEventListener(
+            "submit",
+            function (event) {
+
+                event.preventDefault();
+
+                queueCampaign(event);
+
+            }
+        );
+
+    }
+
 
 }
 
@@ -221,46 +316,61 @@ async function loadGroups() {
 
 async function loadTemplates() {
 
-    const response =
-        await apiRequest(
-            "/templates"
-        );
+    console.log("loadTemplates started");
 
+
+    const response =
+        await apiRequest("/templates");
+
+
+    console.log("Template API response:", response);
 
 
     if (!response.success) {
+
+        console.log("Template API failed");
 
         return;
 
     }
 
 
-
     templates =
         response.data || [];
 
 
+    console.log(
+        "Templates received:",
+        templates
+    );
+
 
     const select =
-        document.getElementById(
-            "template"
-        );
+        document.getElementById("template");
 
+
+    console.log(
+        "Template select:",
+        select
+    );
 
 
     templates.forEach(template => {
 
         select.innerHTML +=
-
         `
         <option value="${template.id}">
-
             ${template.template_name}
-
         </option>
         `;
 
     });
+
+
+    console.log(
+        "Final template HTML:",
+        select.innerHTML
+    );
 
 }
 
@@ -270,12 +380,6 @@ async function loadTemplates() {
 
 function renderTargetSelector() {
 
-    const type =
-        document.getElementById(
-            "target_type"
-        ).value;
-
-
 
     const container =
         document.getElementById(
@@ -283,12 +387,26 @@ function renderTargetSelector() {
         );
 
 
-
     container.innerHTML = "";
 
 
+    switch (targetType) {
 
-    switch (type) {
+
+        case "All":
+
+            container.innerHTML = `
+                <div class="alert alert-info">
+                    <i data-lucide="users"></i>
+                    This campaign will be sent to <strong>all contacts</strong>.
+                </div>
+            `;
+
+            lucide.createIcons();
+
+            break;
+
+
 
         case "Group":
 
@@ -317,6 +435,12 @@ function renderTargetSelector() {
             );
 
             break;
+
+
+
+        default:
+
+            container.innerHTML = "";
 
     }
 
@@ -536,9 +660,37 @@ function applyTemplate() {
     ).value =
         template.message;
 
+    selectedTemplateAttachment = {
 
+    attachment:
+        template.attachment,
+
+    attachment_name:
+        template.attachment_name,
+
+    mime_type:
+        template.mime_type,
+    
+        attachment_type:
+        template.attachment_type,
+    
+        file_size:
+        template.file_size
+
+    };
+
+    console.log("Selected Attachment:",selectedTemplateAttachment);
+
+    if (!template.attachment) {
+
+    selectedTemplateAttachment = null;
+
+}
 
     updatePreview();
+
+    previewTemplateAttachment();
+
 
 }
 
@@ -685,7 +837,6 @@ async function loadCampaign(id) {
         );
 
 
-
     if (!response.success) {
 
         alert(
@@ -697,51 +848,96 @@ async function loadCampaign(id) {
     }
 
 
-
     const campaign =
         response.data;
 
 
 
-    document.getElementById(
-        "campaignId"
-    ).value =
-        campaign.id;
+    const campaignIdField =
+        document.getElementById(
+            "campaignId"
+        );
+
+    if (campaignIdField) {
+
+        campaignIdField.value =
+            campaign.id;
+
+    }
 
 
 
-    document.getElementById(
-        "campaign_name"
-    ).value =
-        campaign.campaign_name;
+    const campaignName =
+        document.getElementById(
+            "campaign_name"
+        );
+
+    if (campaignName) {
+
+        campaignName.value =
+            campaign.campaign_name;
+
+    }
 
 
 
-    document.getElementById(
-        "campaign_type"
-    ).value =
-        campaign.campaign_type;
+    const campaignType =
+        document.getElementById(
+            "campaign_type"
+        );
+
+    if (campaignType) {
+
+        campaignType.value =
+            campaign.campaign_type;
+
+    }
 
 
 
-    document.getElementById(
-        "target_type"
-    ).value =
-        campaign.target_type;
+    const targetTypeSelect =
+        document.getElementById(
+            "targetType"
+        );
+
+    if (targetTypeSelect) {
+
+        targetTypeSelect.value =
+            campaign.target_type;
+
+
+        targetType =
+            campaign.target_type;
+
+    }
 
 
 
-    document.getElementById(
-        "message"
-    ).value =
-        campaign.message;
+    const message =
+        document.getElementById(
+            "message"
+        );
+
+    if (message) {
+
+        message.value =
+            campaign.message;
+
+    }
 
 
 
-    document.getElementById(
-        "scheduled_at"
-    ).value =
-        campaign.scheduled_at || "";
+    const scheduledAt =
+        document.getElementById(
+            "scheduled_at"
+        );
+
+    if (scheduledAt) {
+
+        scheduledAt.value =
+            campaign.scheduled_at || "";
+
+    }
 
 
 
@@ -757,107 +953,185 @@ function buildPayload(status) {
 
     let targetValue = "";
 
-
-
     const targetType =
-        document.getElementById(
-            "target_type"
-        ).value;
+        document.getElementById("targetType")?.value || "All";
+
+
+    switch (targetType) {
+
+
+        case "All":
+
+            targetValue = "";
+
+            break;
 
 
 
-    if (targetType === "Group") {
+        case "Group":
 
-        targetValue =
-            document.getElementById(
-                "target_value"
-            ).value;
+            targetValue =
+                document.getElementById("target_value")?.value || "";
 
-    }
+            break;
 
 
 
-    if (targetType === "Contacts") {
+        case "Contacts":
 
-        targetValue =
-            Array.from(
-
-                document.querySelectorAll(
-                    ".contact-check:checked"
+            targetValue =
+                Array.from(
+                    document.querySelectorAll(
+                        ".contact-check:checked"
+                    )
                 )
+                .map(
+                    checkbox => checkbox.value
+                )
+                .join(",");
 
-            )
-            .map(x => x.value)
-            .join(",");
+            break;
+
+
+
+        case "Manual":
+
+            targetValue =
+                document.getElementById("manual_numbers")
+                ?.value
+                ?.trim() || "";
+
+            break;
 
     }
 
 
 
-    if (targetType === "Manual") {
+    const payload = {
 
-        targetValue =
-            document.getElementById(
-                "manual_numbers"
-            ).value;
-
-    }
-
-
-
-    return {
 
         campaign_name:
-
-            document.getElementById(
-                "campaign_name"
-            ).value.trim(),
+            document.getElementById("campaign_name")
+            ?.value
+            ?.trim() || "",
 
 
 
         campaign_type:
-
-            document.getElementById(
-                "campaign_type"
-            ).value,
+            document.getElementById("campaign_type")
+            ?.value || "Instant",
 
 
 
         target_type:
-
             targetType,
 
 
 
         target_value:
-
             targetValue,
 
 
 
-        message:
+        template_id:
+            document.getElementById("template")
+            ?.value || "",
 
-            document.getElementById(
-                "message"
-            ).value,
+
+
+        message:
+            document.getElementById("message")
+            ?.value || "",
+
+
+
+        template_attachment:
+            selectedTemplateAttachment?.attachment || "",
+
+
+
+        template_attachment_name:
+            selectedTemplateAttachment?.attachment_name || "",
+
+
+
+        template_attachment_type:
+            selectedTemplateAttachment?.attachment_type || "",
+
+
+
+        template_mime_type:
+            selectedTemplateAttachment?.mime_type || "",
+
+
+
+        template_file_size:
+            selectedTemplateAttachment?.file_size || "",
 
 
 
         scheduled_at:
-
-            document.getElementById(
-                "scheduled_at"
-            ).value,
+            document.getElementById("scheduled_at")
+            ?.value || null,
 
 
 
-        attachment: null,
-
-
-
-        status
+        status:
+            status
 
     };
+
+
+    console.log(
+        "AMS Campaign Payload:",
+        payload
+    );
+
+
+    return payload;
+
+}
+
+function buildFormData(status) {
+
+    const data = buildPayload(status);
+
+    const formData = new FormData();
+
+
+    Object.keys(data).forEach(key => {
+
+        formData.append(
+            key,
+            data[key] || ""
+        );
+
+    });
+
+
+    const file =
+        document.getElementById(
+            "attachment"
+        ).files[0];
+
+
+    console.log(
+        "SELECTED FILE:",
+        file
+    );
+
+
+    if (file) {
+
+        formData.append(
+            "attachment",
+            file
+        );
+
+    }
+
+
+    return formData;
 
 }
 
@@ -877,17 +1151,97 @@ function validateForm(payload) {
 
 
 
-    if (
-        payload.target_value === ""
-    ) {
+    function buildPayload(status) {
 
-        alert(
-            "Please select recipients."
-        );
+    let targetValue = "";
 
-        return false;
+    const targetType =
+        document.getElementById(
+            "target_type"
+        ).value;
+
+    switch (targetType) {
+
+        case "All":
+
+            targetValue = "";
+
+            break;
+
+        case "Group":
+
+            targetValue =
+                document.getElementById(
+                    "target_value"
+                ).value;
+
+            break;
+
+        case "Contacts":
+
+            targetValue =
+                Array.from(
+
+                    document.querySelectorAll(
+                        ".contact-check:checked"
+                    )
+
+                )
+                .map(contact => contact.value)
+                .join(",");
+
+            break;
+
+        case "Manual":
+
+            targetValue =
+                document.getElementById(
+                    "manual_numbers"
+                ).value.trim();
+
+            break;
 
     }
+
+    return {
+
+        campaign_name:
+
+            document.getElementById(
+                "campaign_name"
+            ).value.trim(),
+
+        campaign_type:
+
+            document.getElementById(
+                "campaign_type"
+            ).value,
+
+        target_type:
+
+            targetType,
+
+        target_value:
+
+            targetValue,
+
+        message:
+
+            document.getElementById(
+                "message"
+            ).value,
+
+        scheduled_at:
+
+            document.getElementById(
+                "scheduled_at"
+            ).value,
+
+        status
+
+    };
+
+}
 
 
 
@@ -932,7 +1286,7 @@ function validateForm(payload) {
 
 async function saveDraft() {
 
-    const payload =
+    const validationPayload=
         buildPayload(
             "Draft"
         );
@@ -941,7 +1295,7 @@ async function saveDraft() {
 
     if (
         !validateForm(
-            payload
+            validationPayloadpayload
         )
     ) {
 
@@ -949,7 +1303,7 @@ async function saveDraft() {
 
     }
 
-
+    const payload = buildFormData("Draft");
 
     let response;
 
@@ -1019,26 +1373,31 @@ async function queueCampaign(event) {
 
 
 
-    const payload =
-        buildPayload(
-            document.getElementById(
-                "campaign_type"
-            ).value === "Scheduled"
-                ? "Scheduled"
-                : "Queued"
-        );
+    const status =
+    document.getElementById(
+        "campaign_type"
+    ).value === "Scheduled"
+        ? "Scheduled"
+        : "Queued";
 
 
+const validationPayload =
+    buildPayload(status);
 
-    if (
-        !validateForm(
-            payload
-        )
-    ) {
 
-        return;
+if (
+    !validateForm(
+        validationPayload
+    )
+) {
 
-    }
+    return;
+
+}
+
+
+const payload =
+    buildFormData(status);
 
 
 
@@ -1224,5 +1583,75 @@ function escapeHtml(text) {
         .replace(/"/g, "&quot;")
 
         .replace(/'/g, "&#039;");
+
+}
+
+
+function previewTemplateAttachment() {
+
+    const preview =
+        document.getElementById(
+            "attachmentPreview"
+        );
+
+
+    if (!preview) return;
+
+
+    if (
+        selectedTemplateAttachment &&
+        selectedTemplateAttachment.attachment
+    ) {
+
+
+        const file =
+            selectedTemplateAttachment.attachment;
+
+
+        const type =
+            selectedTemplateAttachment.mime_type || "";
+
+
+        if (type.startsWith("image/")) {
+
+            preview.innerHTML =
+            `
+            <img
+                src="${file}"
+                class="upload-preview">
+            `;
+
+        }
+        else {
+
+            preview.innerHTML =
+            `
+            <div class="text-center">
+
+                <i data-lucide="file-text"
+                   class="file-icon">
+                </i>
+
+                <br><br>
+
+                <strong>
+                    ${selectedTemplateAttachment.attachment_name}
+                </strong>
+
+            </div>
+            `;
+
+            lucide.createIcons();
+
+        }
+
+
+    }
+    else {
+
+        preview.innerHTML =
+            "No attachment";
+
+    }
 
 }

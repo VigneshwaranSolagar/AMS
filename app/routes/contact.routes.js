@@ -65,7 +65,11 @@ router.put(
     contactController.updateContact
 );
 
-
+router.put(
+    "/:id/group",
+    authenticate,
+    contactController.removeFromGroup
+);
 
 router.delete(
     "/:id",
