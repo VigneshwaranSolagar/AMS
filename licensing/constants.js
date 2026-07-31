@@ -1,0 +1,26 @@
+/**
+ * AMS Licensing Constants
+ */
+
+const LICENSE_STATUS = {
+    ACTIVE: "ACTIVE",
+    TRIAL: "TRIAL",
+    EXPIRED: "EXPIRED",
+
+    LICENSE_NOT_FOUND: "LICENSE_NOT_FOUND",
+    INVALID_LICENSE: "INVALID_LICENSE",
+    SIGNATURE_INVALID: "SIGNATURE_INVALID"
+};
+
+
+const LICENSE_TYPES = {
+    TRIAL: "TRIAL",
+    STANDARD: "STANDARD",
+    PREMIUM: "PREMIUM"
+};
+
+
+module.exports = {
+    LICENSE_STATUS,
+    LICENSE_TYPES
+};

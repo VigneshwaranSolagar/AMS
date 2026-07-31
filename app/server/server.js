@@ -3,6 +3,7 @@ const path = require("path");
 const express = require("express");
 
 const app = require("./app");
+const licensing = require("../../licensing");
 
 const appConfig = require("../config/app.config");
 const version = require("../config/version");
@@ -83,6 +84,48 @@ async function start() {
 
         await seedAdmin();
 
+        /*
+==================================================
+LICENSE CHECK (MONITOR MODE)
+==================================================
+*/
+/*
+const activation = licensing.getActivationState();
+
+console.log("\n=================================");
+console.log("AMS Licensing");
+console.log("=================================");
+
+console.log(
+    `Activated : ${activation.activated}`
+);
+
+console.log(
+    `Code      : ${activation.code}`
+);
+
+console.log(
+    `Message   : ${activation.message}`
+);
+
+if (activation.license) {
+
+    console.log(
+        `Customer  : ${activation.license.customer}`
+    );
+
+    console.log(
+        `Plan      : ${activation.license.plan}`
+    );
+
+    console.log(
+        `License   : ${activation.license.licenseId}`
+    );
+
+}
+
+console.log("=================================\n");
+*/
         app.listen(
 
             appConfig.PORT,

@@ -7,6 +7,28 @@ const paths = {
 
     root: ROOT,
 
+    // License
+    license: path.join(
+        ROOT,
+        "app",
+        "license"
+    ),
+
+    licenseFile: path.join(
+        ROOT,
+        "app",
+        "license",
+        "license.lic"
+    ),
+
+    // Logs
+    logs: path.join(
+        ROOT,
+        "app",
+        "logs"
+    ),
+
+    // Database
     database: path.join(
         ROOT,
         "app",
@@ -14,12 +36,14 @@ const paths = {
         "campaignmanager.db"
     ),
 
+    // Auth
     auth: path.join(
         ROOT,
         "app",
         "auth"
     ),
 
+    // Uploads
     uploads: path.join(
         ROOT,
         "app",
@@ -54,38 +78,53 @@ const paths = {
         "temp"
     ),
 
+    // Backup
     backups: path.join(
         ROOT,
         "app",
         "backups"
-    ),
-
-    logs: path.join(
-        ROOT,
-        "app",
-        "logs"
     )
 
 };
 
-Object.values(paths).forEach(folder => {
 
-    if (
+// Create folders only
+const directories = [
 
-        folder !== paths.database &&
+    paths.license,
 
-        !fs.existsSync(folder)
+    paths.logs,
 
-    ) {
+    path.dirname(paths.database),
+
+    paths.auth,
+
+    paths.uploads,
+
+    paths.contacts,
+
+    paths.templates,
+
+    paths.campaigns,
+
+    paths.temp,
+
+    paths.backups
+
+];
+
+
+directories.forEach(folder => {
+
+    if (!fs.existsSync(folder)) {
 
         fs.mkdirSync(folder, {
-
             recursive: true
-
         });
 
     }
 
 });
+
 
 module.exports = paths;
