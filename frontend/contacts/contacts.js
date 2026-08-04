@@ -28,16 +28,15 @@ INITIALIZE
 ==================================================
 */
 
-function initializeContacts() {
-
-
-    loadContacts();
+async function initializeContacts() {
 
     setupEvents();
 
+    await loadGroups();
+
+    await loadContacts();
 
 }
-
 
 
 
@@ -660,5 +659,41 @@ function debounce(
 
     };
 
+
+}
+async function loadGroups() {
+
+    try {
+
+        const response = await apiRequest("/groups");
+
+        if (!response.success)
+            return;
+
+        const select = document.getElementById("filterGroup");
+
+        if (!select)
+            return;
+
+        select.innerHTML = `
+            <option value="">All Groups</option>
+        `;
+
+        response.data.forEach(group => {
+
+            select.innerHTML += `
+                <option value="${group.id}">
+                    ${group.group_name}
+                </option>
+            `;
+
+        });
+
+    }
+    catch (error) {
+
+        console.error("Failed to load groups:", error);
+
+    }
 
 }

@@ -2,70 +2,141 @@ const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
 
-
-
-const uploadDirectory = path.join(
-    __dirname,
-    "..",
-    "uploads",
-    "templates"
-);
+const {
+    app
+} = require("electron");
 
 
 
-if (!fs.existsSync(uploadDirectory)) {
 
-    fs.mkdirSync(
-        uploadDirectory,
-        {
-            recursive: true
-        }
-    );
+function getUploadDirectory(){
+
+
+    let basePath;
+
+
+
+    if(
+        app &&
+        app.isReady()
+    ){
+
+        basePath =
+            app.getPath(
+                "userData"
+            );
+
+    }
+    else{
+
+        basePath =
+            path.join(
+                __dirname,
+                "..",
+                "uploads"
+            );
+
+    }
+
+
+
+
+    const uploadDirectory =
+        path.join(
+            basePath,
+            "uploads",
+            "templates"
+        );
+
+console.log("UPLOAD DIRECTORY:", uploadDirectory);
+
+    if(
+        !fs.existsSync(uploadDirectory)
+    ){
+
+        fs.mkdirSync(
+            uploadDirectory,
+            {
+                recursive:true
+            }
+        );
+
+    }
+
+
+
+    return uploadDirectory;
 
 }
 
 
 
-const storage = multer.diskStorage({
-
-    destination(req, file, callback) {
-
-        callback(
-            null,
-            uploadDirectory
-        );
-
-    },
 
 
+const storage =
+    multer.diskStorage({
 
-    filename(req, file, callback) {
 
-        const extension =
-            path.extname(
-                file.originalname
+        destination(
+            req,
+            file,
+            callback
+        ){
+
+            callback(
+                null,
+                getUploadDirectory()
             );
 
-        const uniqueName =
-            Date.now() +
-            "-" +
-            Math.round(
-                Math.random() * 1000000
-            ) +
-            extension;
+        },
 
-        callback(
-            null,
-            uniqueName
-        );
 
-    }
 
-});
+        filename(
+            req,
+            file,
+            callback
+        ){
+
+
+            const extension =
+                path.extname(
+                    file.originalname
+                );
+
+
+            const uniqueName =
+                Date.now()
+                +
+                "-"
+                +
+                Math.round(
+                    Math.random() * 1000000
+                )
+                +
+                extension;
+
+
+
+            callback(
+                null,
+                uniqueName
+            );
+
+
+        }
+
+
+    });
+
+
+
+
 
 
 
 const allowedMimeTypes = [
+
 
     "image/jpeg",
 
@@ -77,7 +148,12 @@ const allowedMimeTypes = [
 
     "application/pdf"
 
+
 ];
+
+
+
+
 
 
 
@@ -85,15 +161,14 @@ function fileFilter(
     req,
     file,
     callback
-) {
+){
 
-    if (
 
+    if(
         allowedMimeTypes.includes(
             file.mimetype
         )
-
-    ) {
+    ){
 
         return callback(
             null,
@@ -102,34 +177,43 @@ function fileFilter(
 
     }
 
-    callback(
 
+
+    callback(
         new Error(
             "Only JPG, PNG, WEBP, MP4 and PDF files are allowed."
         )
-
     );
+
 
 }
 
 
 
-const upload = multer({
 
-    storage,
 
-    fileFilter,
 
-    limits: {
 
-        fileSize:
-            25 *
-            1024 *
-            1024
+const upload =
+    multer({
 
-    }
+        storage,
 
-});
+        fileFilter,
+
+        limits:{
+
+            fileSize:
+                25 *
+                1024 *
+                1024
+
+        }
+
+    });
+
+
+
 
 
 

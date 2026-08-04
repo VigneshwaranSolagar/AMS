@@ -1,0 +1,4 @@
+first_name,last_name,phone,email,company,tags,group_name,notes
+John,Doe,9876543211,john@test.com,ABC,Lead,VIP,Imported
+Mary,Smith,9876543212,mary@test.com,XYZ,Customer,Regular,Imported
+James,Bond,9876543210,james@test.com,MI6,Lead,VIP,Duplicate Phone

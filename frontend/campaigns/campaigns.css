@@ -10,7 +10,7 @@
 
 
 
-.stats-card {
+/*.stats-card {
 
     border: none;
 
@@ -54,7 +54,7 @@
 
     color: var(--primary-color);
 
-}
+}*/
 
 
 
@@ -64,13 +64,6 @@
 
 }
 
-
-
-.table thead {
-
-    background: #f8fafc;
-
-}
 
 
 
@@ -109,16 +102,6 @@
 .table tbody tr:hover {
 
     background: #f8fafc;
-
-}
-
-
-
-.campaign-name {
-
-    font-weight: 600;
-
-    color: #0f172a;
 
 }
 

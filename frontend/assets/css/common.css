@@ -1,10 +1,16 @@
+/*=========================================================
+    Auto Message System
+    VinSolve Common Components
+=========================================================*/
+
+
+/* Reset */
+
 * {
 
-    margin: 0;
-
-    padding: 0;
-
-    box-sizing: border-box;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 
 }
 
@@ -13,7 +19,7 @@
 html,
 body {
 
-    min-height: 100%;
+    min-height:100%;
 
 }
 
@@ -21,9 +27,10 @@ body {
 
 body {
 
-    font-family: "Poppins", sans-serif;
+    font-family:
+        var(--font-family);
 
-    font-size: 14px;
+    font-size:14px;
 
 }
 
@@ -31,7 +38,7 @@ body {
 
 a {
 
-    text-decoration: none;
+    text-decoration:none;
 
 }
 
@@ -39,17 +46,327 @@ a {
 
 button {
 
-    font-family: inherit;
+    font-family:inherit;
 
 }
 
 
 
+/* Forms */
+
 .form-control {
 
-    border-radius: 10px;
+    border-radius:
+        var(--radius);
 
-    padding: 12px;
+    padding:12px;
+
+    background:#fbfdfd;
+
+    color:var(--text-color);
+
+    border:
+        1px solid var(--border-color);
+
+}
+/* =====================================
+   GLOBAL APPLICATION CARD
+   Premium Gold Theme
+===================================== */
+
+.app-card,
+.dashboard-card,
+.summary-card,
+.stats-card,
+.card {
+
+    position: relative;
+
+    background: var(--card-color);
+
+    color: var(--text-color);
+
+    border: 1px solid transparent;
+
+    border-radius: var(--radius);
+
+    padding: 24px;
+
+    box-shadow: var(--shadow);
+
+    font-family: var(--font-family);
+
+    transition: all .3s ease;
+
+    overflow: hidden;
+
+}
+
+
+/* Gold Gradient Border */
+
+.app-card::before,
+.dashboard-card::before,
+.summary-card::before,
+.stats-card::before,
+.card::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    padding: 1px;
+
+    border-radius: inherit;
+
+    background: linear-gradient(
+        135deg,
+        rgba(212,175,55,.85) 0%,
+        rgba(245,215,110,.40) 50%,
+        rgba(212,175,55,.85) 100%
+    );
+
+mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+-webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+
+    mask-composite: exclude;
+
+    pointer-events: none;
+
+}
+
+
+/* Hover */
+
+.app-card:hover,
+.dashboard-card:hover,
+.summary-card:hover,
+.stats-card:hover,
+.card:hover {
+
+    background: var(--card-hover);
+
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 18px 40px rgba(0,0,0,.45);
+
+}
+/* =====================================================
+   AMS BRAND ATTACHMENT CHIP
+   Universal Component
+===================================================== */
+
+.attachment-chip {
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:8px 16px;
+
+    border-radius:24px;
+
+    background:linear-gradient(
+        135deg,
+        rgba(212,175,55,.12),
+        rgba(245,215,110,.18)
+    );
+
+    border:1px solid rgba(212,175,55,.35);
+
+    color:#1f2937;
+
+    font-size:13px;
+
+    font-weight:500;
+
+    letter-spacing:.2px;
+
+    box-shadow:
+        0 4px 12px rgba(212,175,55,.12);
+
+    transition:
+        all .25s ease;
+
+}
+
+
+.attachment-chip svg {
+
+    width:18px;
+
+    height:18px;
+
+    color:#d4af37;
+
+    flex-shrink:0;
+
+}
+
+
+.attachment-chip span {
+
+    max-width:260px;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
+
+}
+
+
+/* Hover Effect */
+
+.attachment-chip:hover {
+
+    transform:translateY(-2px);
+
+    border-color:#d4af37;
+
+    box-shadow:
+        0 8px 20px rgba(212,175,55,.22);
+
+}
+
+
+/* File Type Variations */
+
+.attachment-chip.image {
+
+    background:
+    rgba(22,163,74,.08);
+
+    border-color:
+    rgba(22,163,74,.25);
+
+}
+
+
+.attachment-chip.image svg {
+
+    color:#16a34a;
+
+}
+
+
+
+.attachment-chip.video {
+
+    background:
+    rgba(220,38,38,.08);
+
+    border-color:
+    rgba(220,38,38,.25);
+
+}
+
+
+.attachment-chip.video svg {
+
+    color:#dc2626;
+
+}
+
+
+
+.attachment-chip.document {
+
+    background:
+    rgba(147,51,234,.08);
+
+    border-color:
+    rgba(147,51,234,.25);
+
+}
+
+
+.attachment-chip.document svg {
+
+    color:#9333ea;
+
+}
+
+
+/* Card Titles */
+
+.app-card h1,
+.app-card h2,
+.app-card h3,
+.app-card h4,
+.dashboard-card h1,
+.dashboard-card h2,
+.dashboard-card h3,
+.dashboard-card h4,
+.summary-card h1,
+.summary-card h2,
+.summary-card h3,
+.summary-card h4,
+.stats-card h1,
+.stats-card h2,
+.stats-card h3,
+.stats-card h4 {
+
+    color: var(--text-color);
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    margin-bottom: 12px;
+
+}
+
+
+/* Card Content */
+
+.app-card p,
+.dashboard-card p,
+.summary-card p,
+.stats-card p {
+
+    color: var(--text-secondary);
+
+    font-size: 15px;
+
+    font-weight: 400;
+
+}
+
+
+/* Statistics Value */
+
+.card-value,
+.stats-value,
+.summary-value {
+
+    color: var(--primary-color);
+
+    font-size: 32px;
+
+    font-weight: 700;
+
+}
+
+.form-control:focus {
+
+    border-color:
+        var(--primary-color);
+
+    box-shadow:
+        0 0 0 0.15rem rgba(212,175,55,0.25);
 
 }
 
@@ -57,33 +374,50 @@ button {
 
 .input-group-text {
 
-    background: #f1f5f9;
+    background:
+        #e4f833;
 
-    border-radius: 10px 0 0 10px;
+    color:
+        var(--primary-color);
+
+    border:
+        1px solid var(--border-color);
+
+    border-radius:
+        var(--radius) 0 0 var(--radius);
 
 }
 
 
+
+/* Cards */
 
 .card {
 
-    border-radius: 16px;
+    border-radius:
+        var(--radius);
 
 }
 
 
+
+/* Soft Shadow */
 
 .shadow-soft {
 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    box-shadow:
+        var(--shadow);
 
 }
 
 
 
+/* Animation */
+
 .fade-in {
 
-    animation: fadeIn 0.3s ease-in-out;
+    animation:
+        fadeIn 0.3s ease-in-out;
 
 }
 
@@ -93,22 +427,28 @@ button {
 
     from {
 
-        opacity: 0;
+        opacity:0;
 
-        transform: translateY(10px);
+        transform:
+            translateY(10px);
 
     }
 
 
     to {
 
-        opacity: 1;
+        opacity:1;
 
-        transform: translateY(0);
+        transform:
+            translateY(0);
 
     }
 
 }
+
+
+
+/* Footer */
 
 .app-footer {
 
@@ -120,12 +460,324 @@ button {
 
     width:100%;
 
-    padding:15px 20px;
+    padding:12px 25px;
 
-    margin-top:30px;
+    margin-top:auto;
 
     font-size:12px;
 
-    opacity:0.75;
+    color:
+        var(--muted-color);
 
+    background:
+        var(--card-color);
+
+    border-top:
+        1px solid var(--border-color);
+
+}
+
+
+
+.app-footer .footer-links {
+
+    display:flex;
+
+    gap:15px;
+
+}
+
+
+
+.app-footer a {
+
+    text-decoration:none;
+
+    color:
+        var(--primary-color);
+
+}
+
+
+
+.app-footer a:hover {
+
+    color:
+        var(--primary-hover);
+
+    text-decoration:underline;
+
+}
+/* =====================================
+   GLOBAL CARD CONTENT ALIGNMENT
+===================================== */
+
+.app-card,
+.dashboard-card,
+.summary-card,
+.stats-card,
+.card {
+
+    text-align: center;
+
+}
+
+
+/* Titles */
+
+.app-card h1,
+.app-card h2,
+.app-card h3,
+.app-card h4,
+.dashboard-card h1,
+.dashboard-card h2,
+.dashboard-card h3,
+.dashboard-card h4,
+.summary-card h1,
+.summary-card h2,
+.summary-card h3,
+.summary-card h4,
+.stats-card h1,
+.stats-card h2,
+.stats-card h3,
+.stats-card h4 {
+
+    text-align: center;
+
+}
+
+
+/* Card Content */
+
+.app-card p,
+.dashboard-card p,
+.summary-card p,
+.stats-card p {
+
+    text-align: center;
+
+}
+
+
+/* Statistics */
+
+.card-value,
+.stats-value,
+.summary-value {
+
+    display: block;
+
+    text-align: center;
+
+    margin-top: 8px;
+
+}
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90px;          /* Adjust as needed */
+    padding: 16px;
+}
+
+.logo img {
+    max-width: 170px;
+    max-height: 70px;
+    width: auto;
+    height: auto;
+    display: block;
+}
+/* =====================================
+   Badge / Tag
+===================================== */
+
+.badge-tag {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 4px 10px;
+
+    border-radius: 999px;
+
+    background: rgba(212,175,55,0.15);
+
+    border: 1px solid rgba(212,175,55,0.30);
+
+    color: var(--primary-color);
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    line-height: 1.2;
+
+    white-space: nowrap;
+
+}
+/* =====================================
+   Global Badge
+===================================== */
+
+.badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 6px 12px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    font-family: var(--font-family);
+
+    letter-spacing: 0.3px;
+
+}
+/* ==========================================================
+   UNIVERSAL WHATSAPP PREVIEW
+   This block overrides all page-specific preview styles.
+   ========================================================== */
+
+.whatsapp-preview{
+    background:#e5ddd5 !important;
+    border:1px solid #d9d9d9 !important;
+    border-radius:18px !important;
+    overflow:hidden !important;
+}
+
+.wa-header{
+    display:flex !important;
+    align-items:center !important;
+    gap:12px !important;
+    padding:14px !important;
+    background:#075E54 !important;
+    color:#fff !important;
+}
+
+.wa-avatar{
+    width:42px !important;
+    height:42px !important;
+    border-radius:50% !important;
+    background:#128C7E !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    font-weight:600 !important;
+    flex-shrink:0 !important;
+}
+
+.wa-body{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:14px !important;
+    padding:18px !important;
+    min-height:420px !important;
+}
+
+.preview-attachment{
+    display:block !important;
+    width:100% !important;
+    margin:0 !important;
+}
+
+.preview-attachment img{
+    display:block !important;
+    width:80% !important;
+    max-height:200px !important;
+    object-fit: contain !important;
+    border-radius:12px !important;
+}
+
+.preview-attachment video{
+    display:block !important;
+    width:80% !important;
+    max-height:150px !important;
+    object-fit:cover !important;
+    border-radius:12px !important;
+}
+
+#totalQueue,#pendingQueue,#sentQueue,#failedQueue{
+
+    font-size:40px;
+
+    font-weight:800;
+
+    letter-spacing:0.5px;
+
+    background: linear-gradient(
+        135deg,
+        #c99700 0%,
+        #ffd700 45%,
+        #b8860b 100%
+    );
+
+    /* Standard property */
+    background-clip: text;
+
+    /* Chrome / Electron / Safari support */
+    -webkit-background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+    color: transparent;
+
+    filter:drop-shadow(
+        0 4px 8px rgba(212,175,55,.25)
+    );
+
+}
+
+
+.document-preview{
+    display:flex !important;
+    align-items:center !important;
+    gap:12px !important;
+    padding:14px !important;
+    border-radius:12px !important;
+    background:#fff !important;
+    border:1px solid #e5e7eb !important;
+}
+
+.wa-message{
+    display:block !important;
+    position:relative !important;
+    width:100% !important;
+    max-width:92% !important;
+    padding:14px !important;
+    background:#ffffff !important;
+    border-radius:12px !important;
+    box-shadow:0 2px 8px rgba(0,0,0,.08) !important;
+    overflow-wrap:anywhere !important;
+}
+
+#messagePreview{
+    display:block !important;
+    position:relative !important;
+    width:100% !important;
+    min-height:70px !important;
+    color:#111827 !important;
+    background:transparent !important;
+    font-size:14px !important;
+    line-height:1.6 !important;
+    white-space:pre-wrap !important;
+    word-break:break-word !important;
+    overflow-wrap:anywhere !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    z-index:10 !important;
+}
+
+.wa-time{
+    margin-top:8px !important;
+    text-align:right !important;
+    font-size:11px !important;
+    color:#6b7280 !important;
 }

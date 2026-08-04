@@ -20,14 +20,13 @@ function licenseGuard(req, res, next) {
 
         return res.status(403).json({
 
-            success:false,
+      success: false,
 
-            message:
-            "AMS license validation failed.",
+      code: "LICENSE_INVALID",
 
-            license: state
+      message: "License missing, invalid or expired."
 
-        });
+     });
 
 
     }

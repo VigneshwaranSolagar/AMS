@@ -1,33 +1,57 @@
+/*=========================================================
+    Auto Message System
+    VinSolve Layout System
+=========================================================*/
+
+
 .app-layout {
 
-    display: flex;
+    display:flex;
 
-    min-height: 100vh;
+    min-height:100vh;
+
+    background:
+        var(--background-color);
 
 }
 
 
-/* Sidebar */
+
+/*=========================================================
+    Sidebar
+=========================================================*/
+
 
 .sidebar {
 
-    width: 260px;
+    width:260px;
 
-    background: var(--secondary-color);
+    background:
 
-    color: white;
+        linear-gradient(
+            180deg,
+            #090909,
+            #111111
+        );
 
-    position: fixed;
 
-    top: 0;
+    color:white;
 
-    bottom: 0;
+    position:fixed;
 
-    left: 0;
+    top:0;
 
-    padding: 20px;
+    bottom:0;
 
-    transition: 0.3s;
+    left:0;
+
+    padding:20px;
+
+    border-right:
+
+        1px solid var(--border-color);
+
+    transition:0.3s;
 
 }
 
@@ -35,11 +59,15 @@
 
 .sidebar .logo {
 
-    font-size: 24px;
+    font-size:24px;
 
-    font-weight: 700;
+    font-weight:700;
 
-    margin-bottom: 30px;
+    margin-bottom:30px;
+
+    color:
+
+        var(--primary-color);
 
 }
 
@@ -47,9 +75,9 @@
 
 .sidebar-menu {
 
-    list-style: none;
+    list-style:none;
 
-    padding: 0;
+    padding:0;
 
 }
 
@@ -57,7 +85,7 @@
 
 .sidebar-menu li {
 
-    margin-bottom: 8px;
+    margin-bottom:8px;
 
 }
 
@@ -65,19 +93,21 @@
 
 .sidebar-menu a {
 
-    display: flex;
+    display:flex;
 
-    align-items: center;
+    align-items:center;
 
-    gap: 12px;
+    gap:12px;
 
-    color: #cbd5e1;
+    color:
 
-    padding: 12px;
+        #cbd5e1;
 
-    border-radius: 10px;
+    padding:12px;
 
-    transition: 0.2s;
+    border-radius:10px;
+
+    transition:0.2s;
 
 }
 
@@ -86,9 +116,15 @@
 .sidebar-menu a:hover,
 .sidebar-menu a.active {
 
-    background: rgba(255,255,255,0.1);
 
-    color: white;
+    background:
+
+        rgba(212,175,55,0.15);
+
+
+    color:
+
+        var(--primary-color);
 
 }
 
@@ -96,77 +132,125 @@
 
 .sidebar-menu svg {
 
-    width: 20px;
+    width:20px;
 
-    height: 20px;
+    height:20px;
 
 }
 
 
 
-/* Main Area */
+/*=========================================================
+    Main Area
+=========================================================*/
+
 
 .main-content {
 
-    margin-left: 260px;
+    margin-left:260px;
 
-    width: calc(100% - 260px);
+    width:
 
-    min-height: 100vh;
+        calc(100% - 260px);
+
+
+    min-height:100vh;
+
+    background:
+
+        var(--background-color);
 
 }
 
 
 
-/* Top Bar */
+/*=========================================================
+    Top Bar
+=========================================================*/
+
 
 .topbar {
 
-    height: 70px;
+    height:70px;
 
-    background: white;
 
-    display: flex;
+    background:
 
-    align-items: center;
+        var(--topbar-color);
 
-    justify-content: space-between;
 
-    padding: 0 30px;
+    display:flex;
 
-    border-bottom: 1px solid #e2e8f0;
+    align-items:center;
+
+    justify-content:space-between;
+
+
+    padding:
+
+        0 30px;
+
+
+    border-bottom:
+
+        1px solid var(--border-color);
+
+
+    color:white;
 
 }
 
 
 
-/* Content */
+.topbar h5 {
+
+    color:
+
+        var(--primary-color);
+
+}
+
+
+
+/*=========================================================
+    Page Content
+=========================================================*/
+
 
 .page-content {
 
-    padding: 30px;
+    padding:30px;
+
+    background:
+
+        var(--background-color);
 
 }
 
 
 
-/* Mobile */
+/*=========================================================
+    Mobile
+=========================================================*/
+
 
 @media(max-width:768px) {
 
 
     .sidebar {
 
-        transform: translateX(-100%);
+        transform:
+
+            translateX(-100%);
 
     }
 
 
     .main-content {
 
-        margin-left: 0;
+        margin-left:0;
 
-        width: 100%;
+        width:100%;
 
     }
 

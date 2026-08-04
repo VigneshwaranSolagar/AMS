@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const paths = require("../config/paths");
 
 const {
     getSocket
@@ -50,14 +51,13 @@ async function sendMessage({
 
     if (attachment) {
 
-        const filePath = path.join(__dirname,"..","uploads",attachment.replace(/^\/uploads\//, ""));
+        const filePath = path.join(  paths.uploads,attachment.replace(/^\/uploads[\\/]/, ""));
 
-        console.log("Attachment Path:", filePath);
+        console.log("Resolved Attachment Path:", filePath);
 
         if (!fs.existsSync(filePath)) {
             throw new Error(`Attachment not found: ${filePath}`);
         }
-
         const buffer = fs.readFileSync(filePath);
 
         console.log("Attachment Size:", buffer.length);

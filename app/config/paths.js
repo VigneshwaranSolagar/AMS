@@ -3,118 +3,148 @@ const fs = require("fs");
 
 const ROOT = process.cwd();
 
+/*
+==================================================
+APPLICATION DATA
+==================================================
+*/
+
+const APP_NAME = "Auto Message System";
+
+const USER_DATA = path.join(
+    process.env.APPDATA,
+    APP_NAME
+);
+
+if (!fs.existsSync(USER_DATA)) {
+
+    fs.mkdirSync(USER_DATA, {
+        recursive: true
+    });
+
+}
+
+/*
+==================================================
+PATHS
+==================================================
+*/
+
 const paths = {
 
     root: ROOT,
 
-    // License
-    license: path.join(
-        ROOT,
-        "app",
-        "license"
-    ),
+    /*
+    ------------------------------------------
+    License
+    ------------------------------------------
+    */
+
+    license: USER_DATA,
 
     licenseFile: path.join(
-        ROOT,
-        "app",
-        "license",
+        USER_DATA,
         "license.lic"
     ),
 
-    // Logs
-    logs: path.join(
-        ROOT,
-        "app",
-        "logs"
-    ),
+    /*
+    ------------------------------------------
+    Database
+    ------------------------------------------
+    */
 
-    // Database
     database: path.join(
-        ROOT,
-        "app",
-        "database",
+        USER_DATA,
         "campaignmanager.db"
     ),
 
-    // Auth
+    /*
+    ------------------------------------------
+    WhatsApp Auth
+    ------------------------------------------
+    */
+
     auth: path.join(
-        ROOT,
-        "app",
+        USER_DATA,
         "auth"
     ),
 
-    // Uploads
+    /*
+    ------------------------------------------
+    Uploads
+    ------------------------------------------
+    */
+
     uploads: path.join(
-        ROOT,
-        "app",
+        USER_DATA,
         "uploads"
     ),
 
     contacts: path.join(
-        ROOT,
-        "app",
+        USER_DATA,
         "uploads",
         "contacts"
     ),
 
     templates: path.join(
-        ROOT,
-        "app",
+        USER_DATA,
         "uploads",
         "templates"
     ),
 
     campaigns: path.join(
-        ROOT,
-        "app",
+        USER_DATA,
         "uploads",
         "campaigns"
     ),
 
     temp: path.join(
-        ROOT,
-        "app",
+        USER_DATA,
         "uploads",
         "temp"
     ),
 
-    // Backup
+    /*
+    ------------------------------------------
+    Logs
+    ------------------------------------------
+    */
+
+    logs: path.join(
+        USER_DATA,
+        "logs"
+    ),
+
+    /*
+    ------------------------------------------
+    Backups
+    ------------------------------------------
+    */
+
     backups: path.join(
-        ROOT,
-        "app",
+        USER_DATA,
         "backups"
     )
 
 };
 
+/*
+==================================================
+CREATE DIRECTORIES
+==================================================
+*/
 
-// Create folders only
-const directories = [
-
-    paths.license,
-
+[
     paths.logs,
-
     path.dirname(paths.database),
-
     paths.auth,
-
     paths.uploads,
-
     paths.contacts,
-
     paths.templates,
-
     paths.campaigns,
-
     paths.temp,
-
     paths.backups
-
-];
-
-
-directories.forEach(folder => {
+].forEach(folder => {
 
     if (!fs.existsSync(folder)) {
 
@@ -126,5 +156,7 @@ directories.forEach(folder => {
 
 });
 
+console.log("AMS USER DATA:", USER_DATA);
+console.log("AMS UPLOAD ROOT:", paths.uploads);
 
 module.exports = paths;

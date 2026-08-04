@@ -1,5 +1,4 @@
 const fs = require("fs");
-const path = require("path");
 const QRCode = require("qrcode");
 
 const {
@@ -10,11 +9,13 @@ const {
 const pino = require("pino");
 
 const {
-    loadSession
+    loadSession,
+    getAuthFolder
 } = require("./session.service");
 
 const waConfig =
     require("../config/whatsapp.config");
+
 
 let socket = null;
 
@@ -28,6 +29,10 @@ let connectedAt = null;
 
 let isStarting = false;
 
+let manualDisconnect = false;
+
+
+
 
 
 function getSocket(){
@@ -35,7 +40,7 @@ function getSocket(){
     if(!socket){
 
         throw new Error(
-            "WhatsApp socket not initialized."
+            "WhatsApp socket not initialized"
         );
 
     }
@@ -43,6 +48,8 @@ function getSocket(){
     return socket;
 
 }
+
+
 
 
 
@@ -54,13 +61,17 @@ function getWhatsAppStatus(){
 
 
 
+
+
 function getWhatsAppInfo(){
 
     return {
 
-        status: whatsappStatus,
+        status:
+            whatsappStatus,
 
-        number: whatsappNumber,
+        number:
+            whatsappNumber,
 
         connectedAt
 
@@ -70,12 +81,9 @@ function getWhatsAppInfo(){
 
 
 
-function getQRCode(){
 
-    console.log(
-        "Current QR Available:",
-        currentQR ? "YES" : "NO"
-    );
+
+function getQRCode(){
 
     return currentQR;
 
@@ -87,33 +95,54 @@ function getQRCode(){
 
 async function clearWhatsAppSession(){
 
+    const authPath =
+    getAuthFolder();
 
-    const authPath = waConfig.AUTH_FOLDER;
+
+    try{
 
 
-    if(
-        fs.existsSync(authPath)
-    ){
+        if(fs.existsSync(authPath)){
 
-        fs.rmSync(
-            authPath,
-            {
-                recursive:true,
-                force:true
-            }
-        );
+
+            fs.rmSync(
+    authPath,
+    {
+        recursive:true,
+        force:true
+    }
+);
+
+
+fs.mkdirSync(
+    authPath,
+    {
+        recursive:true
+    }
+);
+
+
+            console.log(
+                "WhatsApp session cleared"
+            );
+
+
+        }
+
+
+    }
+    catch(error){
 
 
         console.log(
-            "WhatsApp auth session cleared"
+            "Session clear error:",
+            error.message
         );
+
 
     }
 
-
 }
-
-
 
 
 
@@ -125,7 +154,32 @@ async function startWhatsApp(){
     if(isStarting){
 
         console.log(
-            "WhatsApp already starting..."
+            "WhatsApp start already running"
+        );
+
+        return;
+
+    }
+
+    if(socket){
+
+    try{
+
+        socket.end();
+
+    }
+    catch(e){}
+
+    socket = null;
+
+}
+
+    if(
+        whatsappStatus === "Connected"
+    ){
+
+        console.log(
+            "WhatsApp already connected"
         );
 
         return;
@@ -133,13 +187,16 @@ async function startWhatsApp(){
     }
 
 
+
     isStarting = true;
+
+    manualDisconnect = false;
 
     currentQR = null;
 
 
 
-    try {
+    try{
 
 
         const {
@@ -154,25 +211,26 @@ async function startWhatsApp(){
 
 
 
-        socket = makeWASocket({
-
-            auth:state,
-
-            logger:pino({
-
-                level:"silent"
-
-            }),
-
-            browser: waConfig.BROWSER
-
-        });
+        socket =
+            makeWASocket({
 
 
+                auth:state,
 
 
-        whatsappStatus =
-            "Connecting";
+                logger:
+                    pino({
+                        level:"silent"
+                    }),
+
+
+                browser:
+                    waConfig.BROWSER
+
+
+            });
+
+
 
 
 
@@ -204,13 +262,13 @@ async function startWhatsApp(){
 
 
 
+
                 console.log(
-                    "WhatsApp Update:",
-                    {
-                        connection,
-                        hasQR:!!qr
-                    }
+                    "WA Connection:",
+                    connection
                 );
+
+
 
 
 
@@ -218,14 +276,35 @@ async function startWhatsApp(){
                 if(qr){
 
 
-                    currentQR =
-                        await QRCode.toDataURL(qr);
+                    try{
 
 
+                        currentQR =
+                            await QRCode.toDataURL(
+                                qr
+                            );
 
-                    console.log(
-                        "QR generated for frontend"
-                    );
+
+                        whatsappStatus =
+                            "Waiting for QR";
+
+
+                        console.log(
+                            "New WhatsApp QR generated"
+                        );
+
+
+                    }
+                    catch(error){
+
+
+                        console.log(
+                            "QR error:",
+                            error.message
+                        );
+
+
+                    }
 
 
                 }
@@ -235,22 +314,31 @@ async function startWhatsApp(){
 
 
 
-                if(connection==="open"){
+
+
+                if(connection === "open"){
+
 
 
                     whatsappStatus =
                         "Connected";
 
 
-                    currentQR = null;
+                    currentQR =
+                        null;
 
 
-                    isStarting = false;
+
+                    isStarting =
+                        false;
+
 
 
 
                     whatsappNumber =
-                        socket.user?.id
+                        socket
+                        ?.user
+                        ?.id
                         ?.split(":")[0]
                         ?.replace(
                             "@s.whatsapp.net",
@@ -264,16 +352,14 @@ async function startWhatsApp(){
 
 
 
-                    console.log(
-                        "✅ WhatsApp Connected"
-                    );
-
 
                     console.log(
-                        "Number:",
+                        "WhatsApp Connected",
                         whatsappNumber
                     );
 
+
+                    return;
 
                 }
 
@@ -283,19 +369,9 @@ async function startWhatsApp(){
 
 
 
-                if(connection==="close"){
 
 
-
-                    socket = null;
-
-
-                    whatsappStatus =
-                        "Disconnected";
-
-
-                    isStarting = false;
-
+                if(connection === "close"){
 
 
 
@@ -309,9 +385,52 @@ async function startWhatsApp(){
 
 
                     console.log(
-                        "WhatsApp Closed:",
+                        "WhatsApp closed",
                         statusCode
                     );
+
+
+
+
+                    socket = null;
+
+
+                    whatsappStatus =
+                        "Disconnected";
+
+
+                    whatsappNumber =
+                        null;
+
+
+
+                    connectedAt =
+                        null;
+
+
+                    currentQR =
+                        null;
+
+
+
+                    isStarting =
+                        false;
+
+
+
+
+                    if(manualDisconnect){
+
+
+                        console.log(
+                            "Manual disconnect. No reconnect."
+                        );
+
+
+                        return;
+
+                    }
+
 
 
 
@@ -324,7 +443,7 @@ async function startWhatsApp(){
 
 
                         console.log(
-                            "Session expired. Clearing auth..."
+                            "Logged out. Clearing session"
                         );
 
 
@@ -333,14 +452,12 @@ async function startWhatsApp(){
 
 
 
-                        setTimeout(()=>{
-
-
-                            startWhatsApp();
-
-
-                        }, waConfig.QR_REFRESH_DELAY);
-
+                        setTimeout(
+                            ()=>{
+                                startWhatsApp();
+                            },
+                            waConfig.QR_REFRESH_DELAY
+                        );
 
 
                         return;
@@ -352,13 +469,16 @@ async function startWhatsApp(){
 
 
 
-                    setTimeout(()=>{
 
 
-                        startWhatsApp();
+                    setTimeout(
+                        ()=>{
 
+                            startWhatsApp();
 
-                    }, waConfig.RECONNECT_DELAY);
+                        },
+                        waConfig.RECONNECT_DELAY
+                    );
 
 
 
@@ -366,6 +486,7 @@ async function startWhatsApp(){
 
 
             }
+
         );
 
 
@@ -374,23 +495,38 @@ async function startWhatsApp(){
     catch(error){
 
 
-        isStarting = false;
+        console.log(
+            "WhatsApp start error:",
+            error.message
+        );
+
+
+        socket = null;
 
 
         whatsappStatus =
             "Disconnected";
 
 
-        console.log(
-            "WhatsApp Error:",
-            error.message
+        isStarting =
+            false;
+
+
+
+        setTimeout(
+            ()=>{
+                startWhatsApp();
+            },
+            waConfig.RECONNECT_DELAY
         );
 
 
     }
 
 
+
 }
+
 
 
 
@@ -405,12 +541,18 @@ async function disconnectWhatsApp(
 ){
 
 
-    try {
+    manualDisconnect = true;
+
+
+
+    try{
 
 
         if(socket){
 
+
             await socket.logout();
+
 
         }
 
@@ -449,7 +591,6 @@ async function disconnectWhatsApp(
 
 
 
-
     if(clearSession){
 
 
@@ -457,6 +598,7 @@ async function disconnectWhatsApp(
 
 
     }
+
 
 
 }
@@ -482,5 +624,6 @@ module.exports = {
     disconnectWhatsApp,
 
     clearWhatsAppSession
+
 
 };

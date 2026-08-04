@@ -1,0 +1,25 @@
+body {
+
+    background:#f5f6fa;
+
+}
+
+
+.license-container {
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+
+.license-card {
+
+    width:420px;
+
+}

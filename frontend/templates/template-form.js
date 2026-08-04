@@ -589,7 +589,8 @@ async function loadTemplate(id) {
                 );
 
             image.src =
-                template.attachment;
+    "http://localhost:3000" +
+    template.attachment;
 
             image.style.display =
                 "block";
@@ -609,7 +610,8 @@ async function loadTemplate(id) {
                 );
 
             video.src =
-                template.attachment;
+    "http://localhost:3000" +
+    template.attachment;
 
             video.style.display =
                 "block";

@@ -1,6 +1,6 @@
 const path = require("path");
-
 const express = require("express");
+const paths = require("../config/paths");
 
 const app = require("./app");
 const licensing = require("../../licensing");
@@ -10,12 +10,19 @@ const version = require("../config/version");
 
 const initializeDatabase = require("../database/schema");
 const migrateGroups = require("../database/migrations/migration");
-const seedAdmin = require("../database/seed");
 
-const { startScheduler } = require("../scheduler/scheduler");
-const { startWhatsApp } = require("../whatsapp/whatsapp.service");
-const logger = require("../utils/logger");
-const { runHealthCheck } = require("../startup/healthcheck");
+const { startScheduler } =
+    require("../scheduler/scheduler");
+
+const {
+    startWhatsApp
+} = require("../whatsapp/whatsapp.service");
+
+const {
+    runHealthCheck
+} = require("../startup/healthcheck");
+
+
 /*
 ==================================================
 SERVE FRONTEND
@@ -23,17 +30,14 @@ SERVE FRONTEND
 */
 
 app.use(
-
     express.static(
-
         path.join(
             __dirname,
             "../../frontend"
         )
-
     )
-
 );
+
 
 /*
 ==================================================
@@ -45,92 +49,35 @@ async function start() {
 
     try {
 
-        console.log(
-            "\n================================="
-        );
+        console.log("\n=================================");
+        console.log(`${version.APP_NAME} ${version.VERSION}`);
+        console.log(`Build : ${version.BUILD}`);
+        console.log(`Company : ${version.COMPANY}`);
+        console.log("=================================\n");
 
-        console.log(
-            `${version.APP_NAME} ${version.VERSION}`
-        );
-
-        console.log(
-            `Build : ${version.BUILD}`
-        );
-
-        console.log(
-            `Company : ${version.COMPANY}`
-        );
-
-        console.log(
-            "=================================\n"
-        );
-
-        console.log(
-            "Initializing Database..."
-        );
+        console.log("Initializing Database...");
 
         await initializeDatabase();
+
         await runHealthCheck();
-        
-        console.log(
-            "Running Migrations..."
-        );
+
+        console.log("Running Migrations...");
 
         await migrateGroups();
 
         console.log(
-            "Creating Default Admin..."
+            "ABOUT TO START HTTP SERVER"
         );
 
-        await seedAdmin();
-
-        /*
-==================================================
-LICENSE CHECK (MONITOR MODE)
-==================================================
-*/
-/*
-const activation = licensing.getActivationState();
-
-console.log("\n=================================");
-console.log("AMS Licensing");
-console.log("=================================");
-
-console.log(
-    `Activated : ${activation.activated}`
-);
-
-console.log(
-    `Code      : ${activation.code}`
-);
-
-console.log(
-    `Message   : ${activation.message}`
-);
-
-if (activation.license) {
-
-    console.log(
-        `Customer  : ${activation.license.customer}`
-    );
-
-    console.log(
-        `Plan      : ${activation.license.plan}`
-    );
-
-    console.log(
-        `License   : ${activation.license.licenseId}`
-    );
-
-}
-
-console.log("=================================\n");
-*/
-        app.listen(
+        const server = app.listen(
 
             appConfig.PORT,
 
             async () => {
+
+                console.log(
+                    "HTTP SERVER CALLBACK FIRED"
+                );
 
                 console.log(
                     `🚀 Server running on port ${appConfig.PORT}`
@@ -140,17 +87,56 @@ console.log("=================================\n");
                     `🌐 Application: http://localhost:${appConfig.PORT}`
                 );
 
+                /*
+                ==========================================
+                LICENSE CHECK
+                ==========================================
+                */
+
+                const activation =
+                    licensing.getActivationState();
+
                 console.log(
-                    "Starting WhatsApp..."
+                    "LICENSE STATUS:",
+                    activation
                 );
 
-                await startWhatsApp();
+                if (
+                    activation.status === "ACTIVE"
+                ) {
 
-                console.log(
-                    "Starting Scheduler..."
-                );
+                    console.log(
+                        "License verified."
+                    );
 
-                startScheduler();
+                    console.log(
+                        "Starting WhatsApp..."
+                    );
+
+                    await startWhatsApp();
+
+                    console.log(
+                        "Starting Scheduler..."
+                    );
+
+                    startScheduler();
+
+                }
+                else {
+
+                    console.log(
+                        "License inactive."
+                    );
+
+                    console.log(
+                        "WhatsApp startup skipped."
+                    );
+
+                    console.log(
+                        "Scheduler startup skipped."
+                    );
+
+                }
 
                 console.log(
                     "\n================================="
@@ -168,8 +154,21 @@ console.log("=================================\n");
 
         );
 
-    }
+        server.on(
+            "error",
+            (error) => {
 
+                console.error(
+                    "HTTP SERVER ERROR:",
+                    error
+                );
+
+            }
+        );
+
+        return server;
+
+    }
     catch (error) {
 
         console.error(
@@ -183,6 +182,7 @@ console.log("=================================\n");
     }
 
 }
+
 
 /*
 ==================================================
@@ -216,4 +216,12 @@ process.on(
     }
 );
 
-start();
+
+module.exports = start;
+
+
+if (require.main === module) {
+
+    start();
+
+}

@@ -3,35 +3,28 @@
  * Main Licensing Export
  */
 
-
 const {
     getActivationState
 } = require("./activationState");
 
-
 const {
-    verifySignature
+    verifyActivationKey
 } = require("./licenseVerifier");
-
 
 const {
     getMachineFingerprint
 } = require("./machineFingerprint");
 
-
 const licenseManager =
-require("./licenseManager");
-
-const keyGenerator =
-require("./keyGenerator");
+    require("./licenseManager");
 
 module.exports = {
 
     getActivationState,
 
-    verifySignature,
-
     getMachineFingerprint,
+
+    verifyActivationKey,
 
     createLicense:
         licenseManager.createLicense,
@@ -40,9 +33,6 @@ module.exports = {
         licenseManager.readLicense,
 
     validateLicense:
-        licenseManager.validateLicense,
-    
-        verifyActivationKey:
-     keyGenerator.verifyActivationKey,
+        licenseManager.validateLicense
 
 };

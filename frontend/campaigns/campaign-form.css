@@ -251,21 +251,6 @@ textarea.form-control {
 }
 
 
-
-.target-box {
-
-    border: 1px dashed #cbd5e1;
-
-    border-radius: 10px;
-
-    padding: 16px;
-
-    background: #fafafa;
-
-}
-
-
-
 .target-box:hover {
 
     border-color: var(--primary-color);

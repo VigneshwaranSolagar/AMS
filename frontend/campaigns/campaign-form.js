@@ -1150,101 +1150,6 @@ function validateForm(payload) {
     }
 
 
-
-    function buildPayload(status) {
-
-    let targetValue = "";
-
-    const targetType =
-        document.getElementById(
-            "target_type"
-        ).value;
-
-    switch (targetType) {
-
-        case "All":
-
-            targetValue = "";
-
-            break;
-
-        case "Group":
-
-            targetValue =
-                document.getElementById(
-                    "target_value"
-                ).value;
-
-            break;
-
-        case "Contacts":
-
-            targetValue =
-                Array.from(
-
-                    document.querySelectorAll(
-                        ".contact-check:checked"
-                    )
-
-                )
-                .map(contact => contact.value)
-                .join(",");
-
-            break;
-
-        case "Manual":
-
-            targetValue =
-                document.getElementById(
-                    "manual_numbers"
-                ).value.trim();
-
-            break;
-
-    }
-
-    return {
-
-        campaign_name:
-
-            document.getElementById(
-                "campaign_name"
-            ).value.trim(),
-
-        campaign_type:
-
-            document.getElementById(
-                "campaign_type"
-            ).value,
-
-        target_type:
-
-            targetType,
-
-        target_value:
-
-            targetValue,
-
-        message:
-
-            document.getElementById(
-                "message"
-            ).value,
-
-        scheduled_at:
-
-            document.getElementById(
-                "scheduled_at"
-            ).value,
-
-        status
-
-    };
-
-}
-
-
-
     if (
         payload.message.trim() === ""
     ) {
@@ -1295,7 +1200,7 @@ async function saveDraft() {
 
     if (
         !validateForm(
-            validationPayloadpayload
+            validationPayload
         )
     ) {
 
@@ -1605,7 +1510,8 @@ function previewTemplateAttachment() {
 
 
         const file =
-            selectedTemplateAttachment.attachment;
+    API_BASE_URL.replace("/api", "") +
+    selectedTemplateAttachment.attachment;
 
 
         const type =

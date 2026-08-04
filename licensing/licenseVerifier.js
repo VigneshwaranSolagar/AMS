@@ -1,45 +1,110 @@
 /**
- * AMS Licensing
- * License Signature Verifier
+ * AMS RSA License Verifier
  */
 
-const Errors = require("./errors");
-
-const {
-    LICENSE_STATUS
-} = require("./constants");
+const fs = require("fs");
+const path = require("path");
+const crypto = require("crypto");
 
 
-function verifySignature(license) {
+const PUBLIC_KEY =
+    fs.readFileSync(
+        path.join(
+            __dirname,
+            "keys",
+            "public.pem"
+        ),
+        "utf8"
+    );
 
-    if (!license) {
 
-        return Errors.failure(
-            LICENSE_STATUS.LICENSE_NOT_FOUND,
-            "License not found."
-        );
+
+function verifyActivationKey(key) {
+
+    try {
+
+
+        const decoded =
+            typeof key === "string"
+            ? JSON.parse(key)
+            : key;
+
+
+
+        const raw =
+            JSON.stringify(
+                decoded.payload
+            );
+
+
+
+        const valid =
+            crypto.verify(
+
+                "sha256",
+
+                Buffer.from(raw),
+
+                PUBLIC_KEY,
+
+                Buffer.from(
+                    decoded.signature,
+                    "base64"
+                )
+
+            );
+
+
+
+        if (!valid) {
+
+            return {
+
+                valid:false,
+
+                message:
+                    "Invalid RSA signature."
+
+            };
+
+        }
+
+
+
+        return {
+
+            valid:true,
+
+            payload:
+                decoded.payload,
+
+            message:
+                "License verified."
+
+        };
+
 
     }
+    catch(error) {
 
 
-    /*
-     * Sprint 1
-     *
-     * Signature verification skipped.
-     *
-     * Sprint 2:
-     * Verify using public.pem
-     */
+        return {
 
+            valid:false,
 
-    return Errors.success(
-        license,
-        "Signature verified."
-    );
+            message:
+                error.message
+
+        };
+
+    }
 
 }
 
 
+
 module.exports = {
-    verifySignature
+
+    verifyActivationKey
+
 };

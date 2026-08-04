@@ -4,7 +4,12 @@ const licensing = require("../../licensing");
 function status(req, res) {
 
     const activation =
-        licensing.getActivationState();
+    licensing.getActivationState();
+
+console.log(
+    "IMPORT ACTIVATION STATE:",
+    activation
+);
 
     res.json(activation);
 
@@ -154,6 +159,109 @@ function activateKey(req,res){
 
 }
 
+const fs = require("fs");
+const path = require("path");
+
+function importLicense(req, res) {
+
+    try {
+
+        if (!req.file) {
+
+            return res.status(400).json({
+
+                success:false,
+
+                message:"License file required."
+
+            });
+
+        }
+
+
+        const licenseData =
+            fs.readFileSync(
+                req.file.path,
+                "utf8"
+            );
+
+        console.log(
+    "UPLOADED LICENSE CONTENT:",
+    licenseData.substring(0,100)
+);
+
+        const result =
+            licensing.verifyActivationKey(
+                    licenseData
+            );
+        console.log(
+    "VERIFY RESULT:",
+    result
+);
+
+        if (!result.valid) {
+
+            return res.status(400).json({
+
+                success:false,
+
+                message:"Invalid license signature."
+
+            });
+
+        }
+
+
+        const license =
+            licensing.createLicense(
+                result.payload
+            );
+
+
+        const activation =
+            licensing.getActivationState();
+
+
+        console.log(
+            "POST IMPORT STATE:",
+            activation
+        );
+
+
+        res.json({
+
+            success:true,
+
+            message:
+                "License imported successfully.",
+
+            license
+
+        });
+
+
+    }
+    catch(error) {
+
+
+        console.error(
+            "License Import Error:",
+            error
+        );
+
+
+        res.status(500).json({
+
+            success:false,
+
+            message:error.message
+
+        });
+
+    }
+
+}
+
 module.exports = {
 
     status,
@@ -162,6 +270,8 @@ module.exports = {
 
     activate,
 
-    activateKey
+    activateKey,
+
+    importLicense
 
 };

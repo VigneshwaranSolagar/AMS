@@ -1,8 +1,14 @@
+/* Dashboard Cards */
+
 .dashboard-card {
 
-    border: none;
+    background: var(--card-bg);
+
+    border: 1px solid rgba(255,255,255,0.08);
 
     border-radius: 16px;
+
+    color: var(--text-color);
 
     transition: all 0.3s ease;
 
@@ -14,13 +20,17 @@
 
     transform: translateY(-5px);
 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+
 }
 
 
 
+/* Card Labels */
+
 .dashboard-card h6 {
 
-    color: var(--muted-color);
+    color: rgba(255,255,255,0.65);
 
     font-weight: 500;
 
@@ -28,7 +38,11 @@
 
 
 
+/* Main Numbers */
+
 .dashboard-card h2 {
+
+    color: #ffffff;
 
     font-size: 32px;
 
@@ -39,6 +53,8 @@
 }
 
 
+
+/* Status Cards */
 
 .status-card {
 
@@ -52,6 +68,8 @@
 
 
 
+/* Icons */
+
 .status-icon {
 
     width: 45px;
@@ -62,13 +80,19 @@
 
     border-radius: 12px;
 
+    background: rgba(255,255,255,0.08);
+
 }
 
 
 
+/* Recent Activity Table */
+
 .recent-table {
 
     font-size: 14px;
+
+    color: #ffffff;
 
 }
 
@@ -78,11 +102,21 @@
 
     font-weight: 600;
 
-    color: var(--muted-color);
+    color: rgba(255,255,255,0.65);
 
 }
 
 
+
+.recent-table td {
+
+    color: rgba(255,255,255,0.85);
+
+}
+
+
+
+/* Status Badge */
 
 .badge-status {
 
@@ -96,6 +130,8 @@
 
 
 
+/* Charts */
+
 .chart-container {
 
     height: 300px;
@@ -103,6 +139,8 @@
 }
 
 
+
+/* Responsive */
 
 @media(max-width:768px) {
 

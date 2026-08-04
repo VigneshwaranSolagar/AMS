@@ -6,6 +6,8 @@ express.Router();
 const controller =
 require("../controllers/license.controller");
 
+const upload =
+    require("../middleware/licenseUpload");
 
 router.get(
     "/status",
@@ -24,5 +26,14 @@ router.post(
     controller.activateKey
 );
 
+router.post(
+
+    "/import",
+
+    upload.single("license"),
+
+    controller.importLicense
+
+);
 
 module.exports = router;

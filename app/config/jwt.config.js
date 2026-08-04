@@ -1,11 +1,10 @@
-require("dotenv").config();
+const runtimeConfig =
+    require("./runtime.config");
+
 
 module.exports = {
 
     SECRET:
-
-        process.env.JWT_SECRET ||
-
-        "CampaignManagerSuperSecret2026"
+        runtimeConfig.JWT_SECRET
 
 };

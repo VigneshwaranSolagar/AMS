@@ -2,17 +2,12 @@ document.addEventListener(
     "DOMContentLoaded",
     () => {
 
-        // Already logged in
-        if (localStorage.getItem("token")) {
-
-            window.location.href =
-                "../dashboard/dashboard.html";
-
-            return;
-        }
-
         const form =
             document.getElementById("loginForm");
+
+        if (!form) {
+            return;
+        }
 
         form.addEventListener(
             "submit",
@@ -27,10 +22,15 @@ async function login(e) {
     e.preventDefault();
 
     const username =
-        document.getElementById("username").value.trim();
+        document
+            .getElementById("username")
+            .value
+            .trim();
 
     const password =
-        document.getElementById("password").value;
+        document
+            .getElementById("password")
+            .value;
 
     const loginBtn =
         document.getElementById("loginBtn");
@@ -38,9 +38,11 @@ async function login(e) {
     const status =
         document.getElementById("loginStatus");
 
-    loginBtn.disabled = true;
+    if (loginBtn)
+        loginBtn.disabled = true;
 
-    status.innerText = "Logging in...";
+    if (status)
+        status.innerText = "Logging in...";
 
     try {
 
@@ -66,16 +68,18 @@ async function login(e) {
 
         if (!result.success) {
 
-            status.innerText =
-                result.message || "Login Failed";
+            if (status)
+                status.innerText =
+                    result.message || "Invalid User ID or Password.";
 
-            loginBtn.disabled = false;
+            if (loginBtn)
+                loginBtn.disabled = false;
 
             return;
 
         }
 
-        // Save JWT
+        // Save Login Session
 
         localStorage.setItem(
             "token",
@@ -87,22 +91,28 @@ async function login(e) {
             JSON.stringify(result.user)
         );
 
-        status.innerText =
-            "Login Successful";
+        if (status)
+            status.innerText =
+                "Login Successful";
 
-        window.location.href =
-            "../dashboard/dashboard.html";
+        setTimeout(() => {
+
+            window.location.href =
+                "../dashboard/dashboard.html";
+
+        }, 500);
 
     }
-
     catch (err) {
 
         console.error(err);
 
-        status.innerText =
-            "Server Connection Failed";
+        if (status)
+            status.innerText =
+                "Unable to connect to server.";
 
-        loginBtn.disabled = false;
+        if (loginBtn)
+            loginBtn.disabled = false;
 
     }
 

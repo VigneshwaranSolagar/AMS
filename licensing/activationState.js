@@ -36,7 +36,15 @@ function getActivationState() {
 
         }
 
+console.log(
+    "STORED LICENSE FINGERPRINT:",
+    license?.machineFingerprint
+);
 
+console.log(
+    "CURRENT MACHINE FINGERPRINT:",
+    getMachineFingerprint()
+);
 
         // Machine validation
 

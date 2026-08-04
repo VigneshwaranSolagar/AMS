@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 
 const path = require("path");  
+const paths = require("../config/paths");
 const licenseRoutes = require("../routes/license.routes");
 const authRoutes = require("../routes/auth.routes");
 const licenseGuard = require("../middleware/licenseGuard");
@@ -22,9 +23,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/api/license",licenseRoutes);
-app.use( "/uploads",licenseGuard, express.static(path.join(__dirname, "../uploads")));
+const uploadRoot = path.dirname(paths.templates);
 
+console.log("STATIC UPLOAD ROOT:", uploadRoot);
 
+app.use(
+    "/uploads",
+    licenseGuard,
+    express.static(uploadRoot)
+);
+console.log("Serving uploads from:", paths.uploads);
 app.get("/health", (req, res) => {
     res.json({
         status: "OK",

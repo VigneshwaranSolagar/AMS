@@ -1,33 +1,77 @@
-document.addEventListener(
-"DOMContentLoaded",
-function(){
+/**
+ * AMS Branding Loader
+ */
 
-const footer =
-document.getElementById("appFooter");
+(function(){
+
+    const path =
+        window.location.pathname;
 
 
-if(footer){
+    // Find relative asset path
+    let assetPath = "../assets/images/";
 
-footer.innerHTML = `
 
-<div class="app-footer">
+    if(
+        path.includes("/frontend/") &&
+        !path.includes("/dashboard/")
+    ){
 
-<span>
-AMS 
-</span>
+        assetPath = "../assets/images/";
 
-<span>
-A VinSolve Solution
-</span>
+    }
 
-<span>
-© 2026 VinSolve. All Rights Reserved.
-</span>
 
-</div>
 
-`;
+    // Inject favicon
 
-}
+    const favicon =
+        document.createElement(
+            "link"
+        );
 
-});
+    favicon.rel =
+        "icon";
+
+    favicon.type =
+        "image/x-icon";
+
+    favicon.href =
+        assetPath + "favicon.ico";
+
+
+    document.head.appendChild(
+        favicon
+    );
+
+
+
+    // Replace AMS logo containers
+
+    document
+    .querySelectorAll(
+        ".ams-brand"
+    )
+    .forEach(
+        element => {
+
+
+            element.innerHTML = `
+
+            <img
+            src="${assetPath}ams-logo-small.png"
+            class="ams-logo"
+            alt="AMS">
+
+
+            <span>
+            AMS
+            </span>
+
+            `;
+
+        }
+    );
+
+
+})();

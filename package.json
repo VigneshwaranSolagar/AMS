@@ -2,22 +2,24 @@
   "name": "campaignmanager",
   "version": "1.0.0",
   "description": "Professional WhatsApp Campaign Manager",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs",
-    "test": "tests"
-  },
+  "main": "electron/main.js",
+
   "scripts": {
-    "start": "node app/server/server.js",
-    "dev": "nodemon app/server/server.js"
+    "start": "electron .",
+    "server": "node app/server/server.js",
+    "dev": "nodemon app/server/server.js",
+    "dist": "electron-builder",
+    "pack": "electron-builder --dir"
   },
+
   "keywords": [],
-  "author": "",
+  "author": "VinSolve",
   "license": "ISC",
   "type": "commonjs",
+
   "dependencies": {
     "@whiskeysockets/baileys": "^7.0.0-rc14",
-    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.6",
     "csv-parser": "^3.2.1",
     "dotenv": "^17.4.2",
@@ -33,11 +35,109 @@
     "sqlite": "^5.1.1",
     "sqlite3": "^6.0.1"
   },
+
   "devDependencies": {
     "concurrently": "^10.0.4",
     "electron": "^43.2.0",
     "electron-builder": "^26.15.3",
     "nodemon": "^3.1.14",
     "wait-on": "^9.1.0"
+  },
+
+  "build": {
+
+    "appId": "in.vinsolve.ams",
+
+    "productName": "Auto Message System",
+
+    "copyright": "Copyright © 2026 VinSolve",
+
+    "asar": true,
+
+    "publish": null,
+
+    "directories": {
+      "output": "dist"
+    },
+
+
+    "files": [
+
+      "app/**/*",
+
+      "frontend/**/*",
+
+      "electron/**/*",
+
+      "licensing/**/*",
+
+      "node_modules/**/*",
+
+      "package.json",
+
+
+      "!app/tools/**/*",
+
+      "!app/auth/**/*",
+
+      "!app/uploads/**/*",
+
+      "!app/logs/**/*",
+
+      "!app/backups/**/*",
+
+      "!app/**/*.db",
+
+      "!**/*.db",
+
+      "!**/*.lic",
+
+      "!**/.env",
+
+      "!**/.env.*",
+
+      "!licensing/keys/private.pem",
+
+      "!licensing/keyGenerator.js",
+
+      "!test-license-generator.js",
+
+      "!logs/**/*",
+
+      "!**/*.log",
+
+      "!**/test-*",
+
+      "!**/demo-*"
+
+    ],
+
+
+    "win": {
+
+      "target": "nsis",
+
+      "icon": "frontend/assets/images/logo.ico",
+
+      "artifactName": "Auto Message System Setup ${version}.${ext}"
+
+    },
+
+
+    "nsis": {
+
+      "oneClick": false,
+
+      "allowToChangeInstallationDirectory": true,
+
+      "createDesktopShortcut": true,
+
+      "createStartMenuShortcut": true,
+
+      "shortcutName": "Auto Message System"
+
+    }
+
   }
+
 }

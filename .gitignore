@@ -1,50 +1,97 @@
-# Environment
-.env
-.env.*
+#########################################################
+# Auto Message System
+# Git Ignore
+#########################################################
 
-# Node
+############################
+# Dependencies
+############################
 node_modules/
 
-# Databases
+############################
+# Build Output
+############################
+dist/
+release/
+out/
+
+############################
+# Runtime Data
+############################
+runtime/
+app/runtime/
+
+############################
+# Database
+############################
 *.db
+*.db-journal
 *.sqlite
 *.sqlite3
 
-# Logs
-logs/
-*.log
-npm-debug.log*
-
-# Uploads
-uploads/*
-!uploads/.gitkeep
-
-# WhatsApp Sessions
-auth/
-auth_backup/
-auth_info/
-sessions/
-.baileys/
+############################
+# Application Data
+############################
 app/auth/
 app/auth_backup/
-app/auth_info/
-app/sessions/
+app/logs/
+app/uploads/
+app/license/
 
-# Build
-dist/
-build/
-out/
+############################
+# Generated Licenses
+############################
+issued-licenses/
 
+############################
+# Private Keys
+############################
+licensing/keys/private.pem
+
+############################
+# Environment Files
+############################
+.env
+.env.local
+.env.production
+
+############################
+# Logs
+############################
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+############################
+# OS Files
+############################
+.DS_Store
+Thumbs.db
+desktop.ini
+
+############################
 # IDE
+############################
 .vscode/
 .idea/
 
-# Temporary
-temp/
-.cache/
+############################
+# Electron
+############################
+*.asar.unpacked
 
-# OS
-.DS_Store
-Thumbs.db
+############################
+# Test / Developer Utilities
+############################
+check-user.js
+check-campaign.js
+remove-admin.js
+test-key.js
+test-license-generator.js
 
-app/uploads/*
+############################
+# Temporary Files
+############################
+*.tmp
+*.temp

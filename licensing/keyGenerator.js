@@ -1,36 +1,22 @@
 /**
- * AMS License Key Generator
+ * AMS
+ * RSA License Key Generator
  */
 
+const fs = require("fs");
+const path = require("path");
 const crypto = require("crypto");
 
 
-const MASTER_KEY =
-    process.env.LICENSE_SECRET ||
-    "AMS_DEFAULT_SECRET";
-
-
-
-function stableStringify(obj) {
-
-    return JSON.stringify(
-
-        Object.keys(obj)
-            .sort()
-            .reduce(
-                (result, key) => {
-
-                    result[key] = obj[key];
-
-                    return result;
-
-                },
-                {}
-            )
-
+const PRIVATE_KEY =
+    fs.readFileSync(
+        path.join(
+            __dirname,
+            "keys",
+            "private.pem"
+        ),
+        "utf8"
     );
-
-}
 
 
 
@@ -39,123 +25,73 @@ function generateActivationKey(data = {}) {
 
     const payload = {
 
+
         customer:
             data.customer || "Demo",
+
+
+        fingerprintVersion:
+            data.fingerprintVersion || 1,
+
 
         machineFingerprint:
             data.machineFingerprint,
 
+
         plan:
             data.plan || "TRIAL",
+
 
         days:
             data.days || 30,
 
+
         createdAt:
             new Date().toISOString()
+
 
     };
 
 
+
     const raw =
-        stableStringify(payload);
+        JSON.stringify(payload);
 
 
 
     const signature =
-        crypto
-        .createHmac(
+        crypto.sign(
             "sha256",
-            MASTER_KEY
+            Buffer.from(raw),
+            PRIVATE_KEY
         )
-        .update(raw)
-        .digest("hex");
+        .toString("base64");
 
 
 
     return {
 
+
         payload,
 
+
         activationKey:
+
             Buffer
-            .from(
-                JSON.stringify({
-                    payload,
-                    signature
-                })
-            )
-            .toString("base64")
+                .from(
+                    JSON.stringify({
+
+                        payload,
+
+                        signature
+
+                    })
+                )
+                .toString("base64")
+
 
     };
 
-
-}
-
-
-
-function verifyActivationKey(key) {
-
-
-    try {
-
-
-        const decoded =
-            JSON.parse(
-                Buffer
-                .from(
-                    key,
-                    "base64"
-                )
-                .toString("utf8")
-            );
-
-
-
-        const raw =
-            stableStringify(
-                decoded.payload
-            );
-
-
-
-        const signature =
-            crypto
-            .createHmac(
-                "sha256",
-                MASTER_KEY
-            )
-            .update(raw)
-            .digest("hex");
-       
-
-
-
-        return {
-
-            valid:
-            signature === decoded.signature,
-
-
-            payload:
-            decoded.payload
-
-        };
-
-
-    }
-    catch(error){
-
-
-        return {
-
-            valid:false,
-
-            message:error.message
-
-        };
-
-    }
 
 }
 
@@ -163,8 +99,6 @@ function verifyActivationKey(key) {
 
 module.exports = {
 
-    generateActivationKey,
-
-    verifyActivationKey
+    generateActivationKey
 
 };

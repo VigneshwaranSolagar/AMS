@@ -11,86 +11,34 @@
    Statistics Cards
 ===================================================== */
 
-.stats-card{
 
-    background:#fff;
 
-    border-radius:18px;
+.stats-icon {
 
-    padding:22px;
+    width: 58px;
+    height: 58px;
 
-    display:flex;
+    border-radius: 14px;
 
-    justify-content:space-between;
+    background: linear-gradient(135deg,#d4af37,#f5d76e);
 
-    align-items:center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    box-shadow:0 10px 25px rgba(0,0,0,.06);
-
-    transition:.25s;
-
-    height:110px;
+    box-shadow: 0 8px 20px rgba(212,175,55,.25);
 
 }
 
-.stats-card:hover{
+.stats-icon svg {
 
-    transform:translateY(-3px);
+    width: 28px;
+    height: 28px;
 
-    box-shadow:0 14px 35px rgba(0,0,0,.10);
-
-}
-
-.stats-card p{
-
-    margin:0;
-
-    color:#7b8794;
-
-    font-size:13px;
-
-    font-weight:500;
+    color: #111827;
+    fill: currentColor;
 
 }
-
-.stats-card h3{
-
-    margin-top:8px;
-
-    font-size:32px;
-
-    font-weight:700;
-
-    color:#212529;
-
-}
-
-.stats-icon{
-
-    width:58px;
-
-    height:58px;
-
-    border-radius:14px;
-
-    background:#f4f6fb;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-}
-
-.stats-icon svg{
-
-    width:28px;
-
-    height:28px;
-
-}
-
 
 /* =====================================================
    Cards
@@ -187,15 +135,7 @@
    Template Name
 ===================================================== */
 
-.template-name{
 
-    font-size:15px;
-
-    font-weight:600;
-
-    color:#212529;
-
-}
 
 .template-category{
 
@@ -207,30 +147,6 @@
 
 }
 
-
-/* =====================================================
-   Preview
-===================================================== */
-
-.template-preview{
-
-    max-width:420px;
-
-    color:#495057;
-
-    font-size:14px;
-
-    overflow:hidden;
-
-    display:-webkit-box;
-
-    -webkit-line-clamp:2;
-
-    -webkit-box-orient:vertical;
-
-    line-height:1.5;
-
-}
 
 
 /* =====================================================
@@ -284,31 +200,6 @@
 .type-document{
 
     color:#9333ea;
-
-}
-
-
-/* =====================================================
-   Variable Badges
-===================================================== */
-
-.variable-badge{
-
-    display:inline-block;
-
-    margin:2px;
-
-    padding:4px 10px;
-
-    border-radius:20px;
-
-    background:#eef5ff;
-
-    color:#2563eb;
-
-    font-size:12px;
-
-    font-weight:600;
 
 }
 
@@ -521,57 +412,6 @@
    TEMPLATE BUILDER
 ===================================================== */
 
-.upload-zone{
-
-    border:2px dashed #d6dce7;
-
-    border-radius:18px;
-
-    background:#fafcff;
-
-    padding:45px;
-
-    text-align:center;
-
-    transition:.25s;
-
-    cursor:pointer;
-
-}
-
-.upload-zone:hover{
-
-    border-color:#4f8cff;
-
-    background:#f5f9ff;
-
-}
-
-.upload-zone svg{
-
-    width:52px;
-
-    height:52px;
-
-    color:#4f8cff;
-
-    margin-bottom:15px;
-
-}
-
-.upload-zone h6{
-
-    font-weight:600;
-
-}
-
-.upload-zone p{
-
-    color:#7c8795;
-
-    margin-bottom:0;
-
-}
 
 
 

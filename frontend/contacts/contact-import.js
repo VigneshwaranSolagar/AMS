@@ -774,7 +774,7 @@ function showStep(step){
     currentImportStep =
         step;
 
-
+    updateWizardSteps(step);
 
     document
         .querySelectorAll(
@@ -812,7 +812,46 @@ function showStep(step){
 }
 
 
+function updateWizardSteps(step) {
 
+    const steps =
+        document.querySelectorAll(
+            ".wizard-step"
+        );
+
+
+    steps.forEach(
+        (item, index) => {
+
+
+            item.classList.remove(
+                "active",
+                "completed"
+            );
+
+
+            if(index + 1 < step){
+
+                item.classList.add(
+                    "completed"
+                );
+
+            }
+
+
+            if(index + 1 === step){
+
+                item.classList.add(
+                    "active"
+                );
+
+            }
+
+
+        }
+    );
+
+}
 
 
 
